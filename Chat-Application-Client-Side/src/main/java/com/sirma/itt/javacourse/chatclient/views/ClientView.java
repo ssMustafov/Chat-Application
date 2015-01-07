@@ -90,7 +90,7 @@ public class ClientView implements View, ActionListener {
 	 */
 	@Override
 	public void appendMessageToChatArea(String message) {
-		String date = Date.getCurrentDate(Date.SIMPLE_DATE_FORMAT);
+		String date = Date.getCurrentDate(Date.SIMPLE_TIME_DATE_FORMAT);
 		String formattedMessage = String.format("[%s] %s%s", date, message, NEW_LINE);
 		chatMessagesArea.append(formattedMessage);
 	}

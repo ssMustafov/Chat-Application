@@ -104,7 +104,7 @@ public class ServerView extends Observable implements View, ActionListener {
 	 */
 	@Override
 	public void appendMessageToConsole(String message) {
-		String date = Date.getCurrentDate(Date.SIMPLE_DATE_FORMAT);
+		String date = Date.getCurrentDate(Date.SIMPLE_TIME_DATE_FORMAT);
 		String formattedMessage = String.format("[%s]: %s%s", date, message, NEW_LINE);
 		consoleArea.append(formattedMessage);
 	}

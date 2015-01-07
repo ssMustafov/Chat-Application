@@ -9,7 +9,8 @@ import java.text.SimpleDateFormat;
  */
 public final class Date {
 
-	public static final String SIMPLE_DATE_FORMAT = "hh:mm:ss";
+	public static final String SIMPLE_TIME_DATE_FORMAT = "kk:mm:ss";
+	public static final String FULL_DATE_FORMAT = "dd-EEEE-Y";
 
 	/**
 	 * Protects from instantiation.
