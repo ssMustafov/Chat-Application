@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.sirma.itt.javacourse.chat</groupId>
+    <artifactId>Chat-Application</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.sirma.itt.javacourse.chatclient</groupId>
+  <artifactId>Chat-Application-Client-Side</artifactId>
+  <name>Chat-Application-Client-Side</name>
+  <description>The client side of chat application</description>
+  
+  <dependencies>
+		<dependency>
+			<groupId>com.sirma.itt.javacourse.chatcommon</groupId>
+			<artifactId>Chat-Application-Common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>

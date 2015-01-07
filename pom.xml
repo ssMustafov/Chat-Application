@@ -6,4 +6,46 @@
   <packaging>pom</packaging>
   <name>Chat-Application</name>
   <description>Chat application parent project</description>
+  <modules>
+  	<module>Chat-Application-Common</module>
+  	<module>Chat-Application-Server-Side</module>
+  	<module>Chat-Application-Client-Side</module>
+  </modules>
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+	  <plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.1</version>
+			<configuration>
+				<source>1.7</source>
+				<target>1.7</target>
+			</configuration>
+		</plugin>
+	  </plugins>
+	</build>
 </project>
