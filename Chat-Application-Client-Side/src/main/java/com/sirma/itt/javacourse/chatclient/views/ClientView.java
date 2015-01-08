@@ -139,8 +139,8 @@ public class ClientView implements View, ActionListener, KeyListener {
 	 */
 	@Override
 	public void resetUI() {
-		sendMessageButton.setEnabled(true);
-		logoutButton.setEnabled(false);
+		sendMessageButton.setEnabled(false);
+		logoutButton.setEnabled(true);
 	}
 
 	/**
@@ -208,7 +208,8 @@ public class ClientView implements View, ActionListener, KeyListener {
 	private void createFields() {
 		clientField = new JTextField(35);
 		clientField.addKeyListener(this);
-		clientField.setDocument(new DocumentLengthFilter(ServerConfig.CLIENT_CHAT_MESSAGE_MAX_LENGTH));
+		clientField.setDocument(new DocumentLengthFilter(
+				ServerConfig.CLIENT_CHAT_MESSAGE_MAX_LENGTH));
 	}
 
 	/**

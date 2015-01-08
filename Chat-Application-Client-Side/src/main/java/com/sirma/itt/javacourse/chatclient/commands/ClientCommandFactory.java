@@ -46,6 +46,9 @@ public final class ClientCommandFactory {
 			case LoggedIn:
 				command = new LoggedInCommand(view, query);
 				break;
+			case Closed:
+				command = new ClosedCommand(view, query);
+				break;
 
 			default:
 				throw new IllegalArgumentException("Not supported command");
