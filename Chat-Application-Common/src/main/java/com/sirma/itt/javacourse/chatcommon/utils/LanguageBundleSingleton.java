@@ -12,6 +12,8 @@ public final class LanguageBundleSingleton {
 
 	private static ResourceBundle serverBundle = ResourceBundle.getBundle("ServerBundle",
 			new Locale("en", "US"));
+	private static ResourceBundle clientLoginBundle = ResourceBundle.getBundle("ClientLoginBundle",
+			new Locale("en", "US"));
 	private static ResourceBundle clientBundle = ResourceBundle.getBundle("ClientBundle",
 			new Locale("en", "US"));
 
@@ -29,6 +31,15 @@ public final class LanguageBundleSingleton {
 	 */
 	public static ResourceBundle getServerBundleInstance() {
 		return serverBundle;
+	}
+
+	/**
+	 * Returns the {@link ResourceBundle} of the client login form.
+	 * 
+	 * @return - the resource bundle of the client login form
+	 */
+	public static ResourceBundle getClientLoginBundleInstance() {
+		return clientLoginBundle;
 	}
 
 	/**
@@ -53,14 +64,26 @@ public final class LanguageBundleSingleton {
 	}
 
 	/**
-	 * Sets the {@link Locale} of the {@link ResourceBundle}.
+	 * Sets the {@link Locale} of the {@link ResourceBundle} for the client.
 	 * 
 	 * @param locale
-	 *            - the locale of the bundle
+	 *            - the locale of the bundle for the client
 	 */
 	public static void setClientLocale(Locale locale) {
 		synchronized (clientBundle) {
 			clientBundle = ResourceBundle.getBundle("ClientBundle", locale);
+		}
+	}
+
+	/**
+	 * Sets the {@link Locale} of the {@link ResourceBundle} for the client login form.
+	 * 
+	 * @param locale
+	 *            - the locale of the bundle for the client login form
+	 */
+	public static void setClientLoginLocale(Locale locale) {
+		synchronized (clientLoginBundle) {
+			clientLoginBundle = ResourceBundle.getBundle("ClientLoginBundle", locale);
 		}
 	}
 

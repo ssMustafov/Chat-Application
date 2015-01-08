@@ -3,6 +3,9 @@ package com.sirma.itt.javacourse.chatclient.views;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -19,17 +22,18 @@ import javax.swing.text.DefaultCaret;
 
 import com.sirma.itt.javacourse.chatclient.client.Client;
 import com.sirma.itt.javacourse.chatcommon.utils.Date;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
+import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 
 /**
  * Represents the user interface for the client.
  * 
  * @author Sinan
  */
-public class ClientView implements View, ActionListener {
+public class ClientView implements View, ActionListener, KeyListener {
 	public static final String SEND_MESSAGE_BUTTON_ACTION_COMMAND = "send";
 	public static final String DISCONNECT_BUTTON_ACTION_COMMAND = "disconnect";
 	private static final String NEW_LINE = System.lineSeparator();
-	private static final String WINDOW_TITLE = "Chat Client";
 	private static final int WINDOW_WIDTH = 600;
 	private static final int WINDOW_HEIGHT = 400;
 	private static final int ONLINE_CLIENTS_LIST_WIDTH = 180;
@@ -40,7 +44,7 @@ public class ClientView implements View, ActionListener {
 	private JButton sendMessageButton;
 	private JTextArea chatMessagesArea;
 	private JTextField clientField;
-
+	private ResourceBundle bundle = LanguageBundleSingleton.getClientBundleInstance();
 	private Client client;
 
 	/**
@@ -50,7 +54,7 @@ public class ClientView implements View, ActionListener {
 	 *            - the client
 	 */
 	public ClientView(Client client) {
-		frame.setTitle(WINDOW_TITLE);
+		frame.setTitle(bundle.getString("title") + " - " + client.getNickname());
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -60,16 +64,19 @@ public class ClientView implements View, ActionListener {
 
 		JScrollPane consoleScrollPane = new JScrollPane();
 		consoleScrollPane.setViewportView(chatMessagesArea);
-		TitledBorder chatMessagesBorder = BorderFactory.createTitledBorder("Chat messages");
+		TitledBorder chatMessagesBorder = BorderFactory.createTitledBorder(bundle
+				.getString("chatMessages"));
 		chatMessagesBorder.setTitleJustification(TitledBorder.CENTER);
 		consoleScrollPane.setBorder(chatMessagesBorder);
 
 		JScrollPane listScrollPane = new JScrollPane(onlineClientsList);
-		TitledBorder onlineClientsBorder = BorderFactory.createTitledBorder("Online clients");
+		TitledBorder onlineClientsBorder = BorderFactory.createTitledBorder(bundle
+				.getString("onlineClients"));
 		onlineClientsBorder.setTitleJustification(TitledBorder.CENTER);
 		listScrollPane.setBorder(onlineClientsBorder);
 
 		clientField = new JTextField(35);
+		clientField.addKeyListener(this);
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.add(clientField);
 		bottomPanel.add(sendMessageButton);
@@ -151,7 +158,11 @@ public class ClientView implements View, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if ("send".equals(cmd)) {
-			client.sendMessage(clientField.getText());
+			if (!Validator.isWhitespaceMessage(clientField.getText())) {
+				client.sendMessage(clientField.getText());
+				clientField.setText("");
+			}
+			clientField.requestFocus();
 		} else if ("logout".equals(cmd)) {
 			client.logout();
 		}
@@ -163,6 +174,7 @@ public class ClientView implements View, ActionListener {
 	private void createTextAreas() {
 		chatMessagesArea = new JTextArea(5, 20);
 		chatMessagesArea.setEditable(false);
+		chatMessagesArea.setLineWrap(true);
 		DefaultCaret consoleCaret = (DefaultCaret) chatMessagesArea.getCaret();
 		consoleCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	}
@@ -171,11 +183,11 @@ public class ClientView implements View, ActionListener {
 	 * Creates the buttons.
 	 */
 	private void createButtons() {
-		sendMessageButton = new JButton("Send");
+		sendMessageButton = new JButton(bundle.getString("send"));
 		sendMessageButton.setActionCommand(SEND_MESSAGE_BUTTON_ACTION_COMMAND);
 		sendMessageButton.addActionListener(this);
 
-		logoutButton = new JButton("Logout");
+		logoutButton = new JButton(bundle.getString("logout"));
 		logoutButton.setActionCommand("logout");
 		logoutButton.addActionListener(this);
 	}
@@ -188,6 +200,32 @@ public class ClientView implements View, ActionListener {
 
 		onlineClientsList = new JList<String>(onlineClientsListModel);
 		onlineClientsList.setFixedCellWidth(ONLINE_CLIENTS_LIST_WIDTH);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			sendMessageButton.doClick();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {
+
 	}
 
 }

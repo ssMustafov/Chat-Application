@@ -59,8 +59,8 @@ public class LoginCommand extends ServerCommand {
 
 		client.setNickname(nickname);
 		// System.out.println(getServerDispatcher().getClientsList());
-		getServerDispatcher().dispatchQuery(
-				new Query(QueryTypes.ClientConnected, client.getNickname()));
+		// getServerDispatcher().dispatchQuery(
+		// new Query(QueryTypes.ClientConnected, client.getNickname()));
 		getServerDispatcher().addClient(client);
 
 		getServerView().appendMessageToConsole(bundle.getString("clientConnected") + nickname);

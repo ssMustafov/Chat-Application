@@ -218,6 +218,7 @@ public class ServerView extends Observable implements View, ActionListener {
 	private void createTextAreas() {
 		consoleArea = new JTextArea(5, 20);
 		consoleArea.setEditable(false);
+		consoleArea.setLineWrap(true);
 		DefaultCaret consoleCaret = (DefaultCaret) consoleArea.getCaret();
 		consoleCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	}

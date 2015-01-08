@@ -47,6 +47,15 @@ public class Client {
 	}
 
 	/**
+	 * Returns the nickname of the client.
+	 * 
+	 * @return - the nickname of the client
+	 */
+	public String getNickname() {
+		return nickname;
+	}
+
+	/**
 	 * Sends a message to the all clients of the chat application.
 	 * 
 	 * @param message

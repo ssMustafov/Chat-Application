@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -26,7 +28,7 @@ import com.sirma.itt.javacourse.chatcommon.utils.Validator;
  * 
  * @author Sinan
  */
-public class LoginForm implements ActionListener {
+public class LoginForm implements ActionListener, KeyListener {
 
 	private JFrame frame;
 	private JTextField nicknameField;
@@ -34,7 +36,7 @@ public class LoginForm implements ActionListener {
 	private JProgressBar progressBar;
 	private JComboBox<?> langList;
 	private JLabel label;
-	private ResourceBundle bundle = LanguageBundleSingleton.getClientBundleInstance();
+	private ResourceBundle bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
 	private String language = "English";
 
 	/**
@@ -56,6 +58,7 @@ public class LoginForm implements ActionListener {
 
 		label = new JLabel(bundle.getString("enterNickname"));
 		nicknameField = new JTextField(20);
+		nicknameField.addKeyListener(this);
 
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.ipady = 0;
@@ -180,14 +183,17 @@ public class LoginForm implements ActionListener {
 
 			ResourceBundle.clearCache();
 			if ("English".equals(language)) {
+				LanguageBundleSingleton.setClientLoginLocale(Locale.US);
 				LanguageBundleSingleton.setClientLocale(Locale.US);
-				bundle = LanguageBundleSingleton.getClientBundleInstance();
+				bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
 			} else {
+				LanguageBundleSingleton.setClientLoginLocale(new Locale("bg", "BG"));
 				LanguageBundleSingleton.setClientLocale(new Locale("bg", "BG"));
-				bundle = LanguageBundleSingleton.getClientBundleInstance();
+				bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
 			}
 			onLocaleChange();
 		}
+		nicknameField.requestFocus();
 	}
 
 	/**
@@ -204,6 +210,32 @@ public class LoginForm implements ActionListener {
 		frame.setTitle(bundle.getString("loginTitle"));
 		label.setText(bundle.getString("enterNickname"));
 		loginButton.setText(bundle.getString("login"));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			loginButton.doClick();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {
+
 	}
 
 }
