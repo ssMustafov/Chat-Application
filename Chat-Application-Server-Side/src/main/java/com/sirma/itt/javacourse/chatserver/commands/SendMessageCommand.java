@@ -2,6 +2,7 @@ package com.sirma.itt.javacourse.chatserver.commands;
 
 import com.sirma.itt.javacourse.chatcommon.utils.Query;
 import com.sirma.itt.javacourse.chatcommon.utils.QueryTypes;
+import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 import com.sirma.itt.javacourse.chatserver.server.Client;
 import com.sirma.itt.javacourse.chatserver.server.ServerDispatcher;
 import com.sirma.itt.javacourse.chatserver.views.View;
@@ -36,7 +37,10 @@ public class SendMessageCommand extends ServerCommand {
 	@Override
 	public void execute(Client client) {
 		String clientMessage = clientQuery.getMessage();
-		String formattedMessage = String.format("<%s>: %s", client.getNickname(), clientMessage);
+		String capitalizedMessage = Validator.capitalizeFirstLetter(clientMessage);
+
+		String formattedMessage = String.format("<%s>: %s", client.getNickname(),
+				capitalizedMessage);
 		getServerDispatcher().dispatchQuery(new Query(QueryTypes.SentMessage, formattedMessage));
 	}
 

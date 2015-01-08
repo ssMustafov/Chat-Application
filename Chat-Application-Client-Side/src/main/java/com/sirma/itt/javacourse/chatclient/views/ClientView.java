@@ -77,6 +77,7 @@ public class ClientView implements View, ActionListener, KeyListener {
 
 		clientField = new JTextField(35);
 		clientField.addKeyListener(this);
+		clientField.requestFocus();
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.add(clientField);
 		bottomPanel.add(sendMessageButton);
