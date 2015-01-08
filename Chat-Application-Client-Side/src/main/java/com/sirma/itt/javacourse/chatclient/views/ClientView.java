@@ -23,6 +23,7 @@ import javax.swing.text.DefaultCaret;
 import com.sirma.itt.javacourse.chatclient.client.Client;
 import com.sirma.itt.javacourse.chatcommon.utils.Date;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
+import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 
 /**
@@ -61,6 +62,7 @@ public class ClientView implements View, ActionListener, KeyListener {
 		createButtons();
 		createTextAreas();
 		createLists();
+		createFields();
 
 		JScrollPane consoleScrollPane = new JScrollPane();
 		consoleScrollPane.setViewportView(chatMessagesArea);
@@ -75,9 +77,6 @@ public class ClientView implements View, ActionListener, KeyListener {
 		onlineClientsBorder.setTitleJustification(TitledBorder.CENTER);
 		listScrollPane.setBorder(onlineClientsBorder);
 
-		clientField = new JTextField(35);
-		clientField.addKeyListener(this);
-		clientField.requestFocus();
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.add(clientField);
 		bottomPanel.add(sendMessageButton);
@@ -194,13 +193,22 @@ public class ClientView implements View, ActionListener, KeyListener {
 	}
 
 	/**
-	 * 
+	 * Creates the lists in the view.
 	 */
 	private void createLists() {
 		onlineClientsListModel = new DefaultListModel<String>();
 
 		onlineClientsList = new JList<String>(onlineClientsListModel);
 		onlineClientsList.setFixedCellWidth(ONLINE_CLIENTS_LIST_WIDTH);
+	}
+
+	/**
+	 * Creates the fields in the view.
+	 */
+	private void createFields() {
+		clientField = new JTextField(35);
+		clientField.addKeyListener(this);
+		clientField.setDocument(new DocumentLengthFilter(ServerConfig.CLIENT_CHAT_MESSAGE_MAX_LENGTH));
 	}
 
 	/**
