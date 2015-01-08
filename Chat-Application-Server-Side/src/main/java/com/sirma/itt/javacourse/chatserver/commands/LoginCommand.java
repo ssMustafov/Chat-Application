@@ -2,12 +2,12 @@ package com.sirma.itt.javacourse.chatserver.commands;
 
 import java.util.ResourceBundle;
 
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.Query;
 import com.sirma.itt.javacourse.chatcommon.utils.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 import com.sirma.itt.javacourse.chatserver.server.Client;
 import com.sirma.itt.javacourse.chatserver.server.ServerDispatcher;
-import com.sirma.itt.javacourse.chatserver.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
@@ -16,7 +16,7 @@ import com.sirma.itt.javacourse.chatserver.views.View;
 public class LoginCommand extends ServerCommand {
 
 	private Query clientQuery;
-	private ResourceBundle bundle = LanguageBundleSingleton.getBundleInstance();
+	private ResourceBundle bundle = LanguageBundleSingleton.getServerBundleInstance();
 
 	/**
 	 * @param serverDispacher
@@ -58,8 +58,9 @@ public class LoginCommand extends ServerCommand {
 		}
 
 		client.setNickname(nickname);
-		// getServerDispatcher().dispatchQuery(
-		// new Query(QueryTypes.ClientConnected, client.getNickname()));
+		// System.out.println(getServerDispatcher().getClientsList());
+		getServerDispatcher().dispatchQuery(
+				new Query(QueryTypes.ClientConnected, client.getNickname()));
 		getServerDispatcher().addClient(client);
 
 		getServerView().appendMessageToConsole(bundle.getString("clientConnected") + nickname);

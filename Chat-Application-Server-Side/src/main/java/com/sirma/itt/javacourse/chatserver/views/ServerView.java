@@ -22,8 +22,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultCaret;
 
 import com.sirma.itt.javacourse.chatcommon.utils.Date;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
-import com.sirma.itt.javacourse.chatserver.utils.LanguageBundleSingleton;
 
 /**
  * Represents the user interface for the server. Extends {@link Observable}.
@@ -49,7 +49,7 @@ public class ServerView extends Observable implements View, ActionListener {
 	private JScrollPane consoleScrollPane;
 	private JScrollPane listScrollPane;
 
-	private ResourceBundle bundle = LanguageBundleSingleton.getBundleInstance();
+	private ResourceBundle bundle = LanguageBundleSingleton.getServerBundleInstance();
 	private int port = Integer.parseInt(ServerConfig.SERVER_PORTS[0]);
 	private String language = "English";
 
@@ -187,11 +187,11 @@ public class ServerView extends Observable implements View, ActionListener {
 
 			ResourceBundle.clearCache();
 			if ("English".equals(language)) {
-				LanguageBundleSingleton.setLocale(Locale.US);
-				bundle = LanguageBundleSingleton.getBundleInstance();
+				LanguageBundleSingleton.setServerLocale(Locale.US);
+				bundle = LanguageBundleSingleton.getServerBundleInstance();
 			} else {
-				LanguageBundleSingleton.setLocale(new Locale("bg", "BG"));
-				bundle = LanguageBundleSingleton.getBundleInstance();
+				LanguageBundleSingleton.setServerLocale(new Locale("bg", "BG"));
+				bundle = LanguageBundleSingleton.getServerBundleInstance();
 			}
 			onLocaleChange();
 		} else {

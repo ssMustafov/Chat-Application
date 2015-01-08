@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.sirma.itt.javacourse.chatserver.utils.LanguageBundleSingleton;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
@@ -27,7 +27,7 @@ public class Server implements Runnable {
 	private ServerSocket serverSocket;
 	private ServerDispatcher serverDispatcher = new ServerDispatcher();
 	private View view;
-	private ResourceBundle bundle = LanguageBundleSingleton.getBundleInstance();
+	private ResourceBundle bundle = LanguageBundleSingleton.getServerBundleInstance();
 	private boolean isClosed = false;
 	private int port;
 

@@ -15,6 +15,7 @@ public class ClientDisconnectedCommand extends ClientCommand {
 	 */
 	public ClientDisconnectedCommand(View view, Query query) {
 		super(view);
+		this.query = query;
 	}
 
 	/**

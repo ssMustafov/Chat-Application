@@ -2,11 +2,11 @@ package com.sirma.itt.javacourse.chatserver.commands;
 
 import java.util.ResourceBundle;
 
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.Query;
 import com.sirma.itt.javacourse.chatcommon.utils.QueryTypes;
 import com.sirma.itt.javacourse.chatserver.server.Client;
 import com.sirma.itt.javacourse.chatserver.server.ServerDispatcher;
-import com.sirma.itt.javacourse.chatserver.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
@@ -14,7 +14,7 @@ import com.sirma.itt.javacourse.chatserver.views.View;
  */
 public class LogoutCommand extends ServerCommand {
 
-	private ResourceBundle bundle = LanguageBundleSingleton.getBundleInstance();
+	private ResourceBundle bundle = LanguageBundleSingleton.getServerBundleInstance();
 
 	/**
 	 * @param serverDispatcher
@@ -32,7 +32,6 @@ public class LogoutCommand extends ServerCommand {
 	@Override
 	public void execute(Client client) {
 		if (!getServerDispatcher().containsClient(client.getNickname())) {
-			// client.sendQuery(new Query(QueryTypes.Refused, "O you hacked me"));
 			return;
 		}
 

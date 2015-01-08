@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,6 +17,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
 import com.sirma.itt.javacourse.chatclient.client.Login;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 
@@ -30,13 +33,16 @@ public class LoginForm implements ActionListener {
 	private JButton loginButton;
 	private JProgressBar progressBar;
 	private JComboBox<?> langList;
+	private JLabel label;
+	private ResourceBundle bundle = LanguageBundleSingleton.getClientBundleInstance();
+	private String language = "English";
 
 	/**
 	 * Creates a new login form.
 	 */
 	public LoginForm() {
 		frame = new JFrame();
-		frame.setTitle("Chat Login Form");
+		frame.setTitle(bundle.getString("loginTitle"));
 		frame.setSize(300, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -48,7 +54,7 @@ public class LoginForm implements ActionListener {
 		createProgressBar();
 		createComboBoxes();
 
-		JLabel label = new JLabel("Enter nickname:");
+		label = new JLabel(bundle.getString("enterNickname"));
 		nicknameField = new JTextField(20);
 
 		constraints.insets = new Insets(0, 0, 0, 0);
@@ -127,7 +133,7 @@ public class LoginForm implements ActionListener {
 	 * Creates the buttons.
 	 */
 	private void createButtons() {
-		loginButton = new JButton("Login");
+		loginButton = new JButton(bundle.getString("login"));
 		loginButton.setActionCommand("login");
 		loginButton.addActionListener(this);
 	}
@@ -151,27 +157,36 @@ public class LoginForm implements ActionListener {
 		if ("login".equals(cmd)) {
 			String nickname = nicknameField.getText();
 			if (nickname.isEmpty()) {
-				showNoticeDialog("The nickname is empty.");
+				showNoticeDialog(bundle.getString("emptyNickname"));
 				return;
 			}
 			if (!Validator.isValidNickname(nickname)) {
-				showNoticeDialog("The nickname contains forbidden symbols. Can consist of letters, numbers, dash and underscore.");
+				showNoticeDialog(bundle.getString("invalidNickname"));
 				return;
 			}
 			if (nickname.length() > Validator.MAX_NICKNAME_LENGHT) {
-				showNoticeDialog("The max allowed nickname length is: "
-						+ Validator.MAX_NICKNAME_LENGHT + ". Your nickname's length is: "
-						+ nickname.length());
+				showNoticeDialog(bundle.getString("maxAllowedNicknameLength")
+						+ Validator.MAX_NICKNAME_LENGHT + ". "
+						+ bundle.getString("yourNicknameLength") + nickname.length());
 				return;
 			}
 
-			// progressBar.setVisible(true);
-			nicknameField.setEnabled(false);
-			loginButton.setEnabled(false);
-			langList.setEnabled(false);
 			Login login = new Login(this);
 			login.connectToServer();
 			login.start();
+		} else if ("langList".equals(cmd)) {
+			JComboBox<?> cb = (JComboBox<?>) e.getSource();
+			language = (String) cb.getSelectedItem();
+
+			ResourceBundle.clearCache();
+			if ("English".equals(language)) {
+				LanguageBundleSingleton.setClientLocale(Locale.US);
+				bundle = LanguageBundleSingleton.getClientBundleInstance();
+			} else {
+				LanguageBundleSingleton.setClientLocale(new Locale("bg", "BG"));
+				bundle = LanguageBundleSingleton.getClientBundleInstance();
+			}
+			onLocaleChange();
 		}
 	}
 
@@ -182,14 +197,13 @@ public class LoginForm implements ActionListener {
 		frame.dispose();
 	}
 
-	// /**
-	// * Updates the text of the UI elements. Must be invoked when the locale is changed.
-	// */
-	// private void onLocaleChange() {
-	// startButton.setText(bundle.getString("start"));
-	// stopButton.setText(bundle.getString("stop"));
-	// labelLang.setText(bundle.getString("chooseLang"));
-	// labelPort.setText(bundle.getString("choosePort"));
-	// }
+	/**
+	 * Updates the text of the UI elements. Must be invoked when the locale is changed.
+	 */
+	private void onLocaleChange() {
+		frame.setTitle(bundle.getString("loginTitle"));
+		label.setText(bundle.getString("enterNickname"));
+		loginButton.setText(bundle.getString("login"));
+	}
 
 }
