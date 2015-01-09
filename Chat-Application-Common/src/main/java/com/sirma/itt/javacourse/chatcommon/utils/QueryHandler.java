@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Holds methods for sending and reading {@code Query}.
@@ -54,6 +55,8 @@ public class QueryHandler {
 			return query;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		} catch (SocketException e) {
+			return null;
 		} catch (EOFException e) {
 			return null;
 		} catch (IOException e) {

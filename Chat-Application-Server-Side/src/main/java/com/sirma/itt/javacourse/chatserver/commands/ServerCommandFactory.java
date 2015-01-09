@@ -5,7 +5,8 @@ import com.sirma.itt.javacourse.chatserver.server.ServerDispatcher;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
- * Factory for creating {@link ServerCommand}s.
+ * Factory for creating {@link ServerCommand}s. These commands are handled by the server and sent
+ * from the clients.
  * 
  * @author Sinan
  */
