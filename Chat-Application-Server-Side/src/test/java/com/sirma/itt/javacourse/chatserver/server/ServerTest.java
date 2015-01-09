@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,10 +56,8 @@ public class ServerTest {
 	public void testServerLoginWithValidClient() {
 		try {
 			testClient = new Socket(host, testPort);
-		} catch (UnknownHostException e) {
-			LOGGER.error(e.getMessage(), e);
 		} catch (IOException e) {
-			LOGGER.error("Closed", e);
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		QueryHandler queryHandler = new QueryHandler(testClient);
@@ -78,10 +75,8 @@ public class ServerTest {
 	public void testServerLoginInvalidClient() {
 		try {
 			testClient = new Socket(host, testPort);
-		} catch (UnknownHostException e) {
-			LOGGER.error(e.getMessage(), e);
 		} catch (IOException e) {
-			LOGGER.error("Closed", e);
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		QueryHandler queryHandler = new QueryHandler(testClient);
@@ -98,22 +93,55 @@ public class ServerTest {
 	public void testServerLogout() {
 		try {
 			testClient = new Socket(host, testPort);
-		} catch (UnknownHostException e) {
-			LOGGER.error(e.getMessage(), e);
 		} catch (IOException e) {
-			LOGGER.error("Closed", e);
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		QueryHandler queryHandler = new QueryHandler(testClient);
 		queryHandler.sendQuery(new Query(QueryTypes.Login, "Client"));
-		queryHandler.readQuery();
-		queryHandler.readQuery();
-		queryHandler.readQuery();
 
 		queryHandler.sendQuery(new Query(QueryTypes.Logout, "Client"));
 		Query answer = queryHandler.readQuery();
 
 		assertEquals(QueryTypes.Success, answer.getQueryType());
+	}
+
+	/**
+	 * Tests client logout without client login.
+	 */
+	@Test
+	public void testServerLogoutWitoutLogin() {
+		try {
+			testClient = new Socket(host, testPort);
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+
+		QueryHandler queryHandler = new QueryHandler(testClient);
+
+		queryHandler.sendQuery(new Query(QueryTypes.Logout, "Client"));
+		Query answer = queryHandler.readQuery();
+
+		assertEquals(QueryTypes.Refused, answer.getQueryType());
+	}
+
+	/**
+	 * Tests client send message without client login.
+	 */
+	@Test
+	public void testServerSendMessageWitoutLogin() {
+		try {
+			testClient = new Socket(host, testPort);
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+
+		QueryHandler queryHandler = new QueryHandler(testClient);
+
+		queryHandler.sendQuery(new Query(QueryTypes.SendMessage, "hello"));
+		Query answer = queryHandler.readQuery();
+
+		assertEquals(QueryTypes.Refused, answer.getQueryType());
 	}
 
 }

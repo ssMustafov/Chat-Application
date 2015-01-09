@@ -36,6 +36,11 @@ public class SendMessageCommand extends ServerCommand {
 	 */
 	@Override
 	public void execute(Client client) {
+		if (!getServerDispatcher().containsClient(client.getNickname())) {
+			client.sendQuery(new Query(QueryTypes.Refused, "You're not logged in"));
+			return;
+		}
+
 		String clientMessage = clientQuery.getMessage();
 		String capitalizedMessage = Validator.capitalizeFirstLetter(clientMessage);
 
