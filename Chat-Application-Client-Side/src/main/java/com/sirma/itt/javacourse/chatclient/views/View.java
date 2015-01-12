@@ -54,4 +54,6 @@ public interface View {
 	 * Clears the area of the online users in the view.
 	 */
 	void clearOnlineClientsList();
+
+	void dispose();
 }

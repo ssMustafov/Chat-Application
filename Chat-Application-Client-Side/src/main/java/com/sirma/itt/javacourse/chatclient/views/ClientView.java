@@ -33,6 +33,7 @@ import com.sirma.itt.javacourse.chatcommon.utils.Validator;
  */
 public class ClientView implements View, ActionListener, KeyListener {
 	public static final String SEND_MESSAGE_BUTTON_ACTION_COMMAND = "send";
+	public static final String LOGOUT_BUTTON_ACTION_COMMAND = "logout";
 	public static final String DISCONNECT_BUTTON_ACTION_COMMAND = "disconnect";
 	private static final String NEW_LINE = System.lineSeparator();
 	private static final int WINDOW_WIDTH = 600;
@@ -157,14 +158,16 @@ public class ClientView implements View, ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		if ("send".equals(cmd)) {
+		if (SEND_MESSAGE_BUTTON_ACTION_COMMAND.equals(cmd)) {
 			if (!Validator.isWhitespaceMessage(clientField.getText())) {
 				client.sendMessage(clientField.getText());
 				clientField.setText("");
 			}
 			clientField.requestFocus();
-		} else if ("logout".equals(cmd)) {
+		} else if (LOGOUT_BUTTON_ACTION_COMMAND.equals(cmd)) {
 			client.logout();
+			frame.dispose();
+			new LoginForm();
 		}
 	}
 
@@ -188,7 +191,7 @@ public class ClientView implements View, ActionListener, KeyListener {
 		sendMessageButton.addActionListener(this);
 
 		logoutButton = new JButton(bundle.getString("logout"));
-		logoutButton.setActionCommand("logout");
+		logoutButton.setActionCommand(LOGOUT_BUTTON_ACTION_COMMAND);
 		logoutButton.addActionListener(this);
 	}
 
@@ -236,6 +239,14 @@ public class ClientView implements View, ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void dispose() {
+		frame.dispose();
 	}
 
 }

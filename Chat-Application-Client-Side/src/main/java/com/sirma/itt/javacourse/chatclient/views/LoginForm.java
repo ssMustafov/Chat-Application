@@ -30,6 +30,9 @@ import com.sirma.itt.javacourse.chatcommon.utils.Validator;
  */
 public class LoginForm implements ActionListener, KeyListener {
 
+	private static final String LOGIN_BUTTON_ACTION_COMMAND = "login";
+	private static final String LANG_LIST_ACTION_COMMAND = "langList";
+	private static final String ENGLISH_STRING = "English";
 	private JFrame frame;
 	private JTextField nicknameField;
 	private JButton loginButton;
@@ -37,7 +40,7 @@ public class LoginForm implements ActionListener, KeyListener {
 	private JComboBox<?> langList;
 	private JLabel label;
 	private ResourceBundle bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
-	private String language = "English";
+	private String language = ENGLISH_STRING;
 
 	/**
 	 * Creates a new login form.
@@ -137,7 +140,7 @@ public class LoginForm implements ActionListener, KeyListener {
 	 */
 	private void createButtons() {
 		loginButton = new JButton(bundle.getString("login"));
-		loginButton.setActionCommand("login");
+		loginButton.setActionCommand(LOGIN_BUTTON_ACTION_COMMAND);
 		loginButton.addActionListener(this);
 	}
 
@@ -146,7 +149,7 @@ public class LoginForm implements ActionListener, KeyListener {
 	 */
 	private void createComboBoxes() {
 		langList = new JComboBox<>(ServerConfig.AVAILABLE_LANGUAGES);
-		langList.setActionCommand("langList");
+		langList.setActionCommand(LANG_LIST_ACTION_COMMAND);
 		langList.setSelectedIndex(0);
 		langList.addActionListener(this);
 	}
@@ -157,7 +160,7 @@ public class LoginForm implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		if ("login".equals(cmd)) {
+		if (LOGIN_BUTTON_ACTION_COMMAND.equals(cmd)) {
 			String nickname = nicknameField.getText();
 			if (nickname.isEmpty()) {
 				showNoticeDialog(bundle.getString("emptyNickname"));
@@ -174,26 +177,40 @@ public class LoginForm implements ActionListener, KeyListener {
 				return;
 			}
 
-			Login login = new Login(this);
-			login.connectToServer();
-			login.start();
-		} else if ("langList".equals(cmd)) {
+			connectToServer();
+		} else if (LANG_LIST_ACTION_COMMAND.equals(cmd)) {
 			JComboBox<?> cb = (JComboBox<?>) e.getSource();
 			language = (String) cb.getSelectedItem();
 
-			ResourceBundle.clearCache();
-			if ("English".equals(language)) {
-				LanguageBundleSingleton.setClientLoginLocale(Locale.US);
-				LanguageBundleSingleton.setClientLocale(Locale.US);
-				bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
-			} else {
-				LanguageBundleSingleton.setClientLoginLocale(new Locale("bg", "BG"));
-				LanguageBundleSingleton.setClientLocale(new Locale("bg", "BG"));
-				bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
-			}
-			onLocaleChange();
+			setLanguage();
 		}
 		nicknameField.requestFocus();
+	}
+
+	/**
+	 * 
+	 */
+	private void setLanguage() {
+		ResourceBundle.clearCache();
+		if (ENGLISH_STRING.equals(language)) {
+			LanguageBundleSingleton.setClientLoginLocale(Locale.US);
+			LanguageBundleSingleton.setClientLocale(Locale.US);
+			bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
+		} else {
+			LanguageBundleSingleton.setClientLoginLocale(new Locale("bg", "BG"));
+			LanguageBundleSingleton.setClientLocale(new Locale("bg", "BG"));
+			bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
+		}
+		onLocaleChange();
+	}
+
+	/**
+	 * 
+	 */
+	private void connectToServer() {
+		Login login = new Login(this);
+		login.connectToServer();
+		login.start();
 	}
 
 	/**
