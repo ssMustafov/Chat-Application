@@ -9,6 +9,10 @@ import java.net.SocketException;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 
 /**
+ * Holds client {@link Socket} and streams for writing and reading. This class must be used for
+ * sending and reading {@link Query}ies. A client's socket must be closed from this class. It uses
+ * {@link ObjectInputStream} and {@link ObjectOutputStream} as streams.
+ * 
  * @author Sinan
  */
 public class QueryHandler {
@@ -16,12 +20,24 @@ public class QueryHandler {
 	private ObjectOutputStream objectOutputStream;
 	private ObjectInputStream objectInputStream;
 
+	/**
+	 * Creates a new query handler with given client socket.
+	 * 
+	 * @param socket
+	 *            - the socket of the client
+	 */
 	public QueryHandler(Socket socket) {
 		this.socket = socket;
 		createStreams();
 		setClientTimeout();
 	}
 
+	/**
+	 * Sends given {@link Query}.
+	 * 
+	 * @param query
+	 *            - the query to be sent through the socket
+	 */
 	public void sendQuery(Query query) {
 		try {
 			objectOutputStream.writeObject(query);
@@ -30,6 +46,13 @@ public class QueryHandler {
 		}
 	}
 
+	/**
+	 * Reads and returns a read {@link Query} from the socket.
+	 * 
+	 * @return - the read query from the socket
+	 * @throws IOException
+	 *             - thrown when I/O error occurs
+	 */
 	public Query readQuery() throws IOException {
 		Query query = null;
 
@@ -42,6 +65,9 @@ public class QueryHandler {
 		return query;
 	}
 
+	/**
+	 * Closes the streams of this socket and the socket.
+	 */
 	public void closeStreams() {
 		try {
 			objectInputStream.close();
@@ -52,6 +78,9 @@ public class QueryHandler {
 		}
 	}
 
+	/**
+	 * Creates the socket's streams.
+	 */
 	private void createStreams() {
 		try {
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -61,6 +90,9 @@ public class QueryHandler {
 		}
 	}
 
+	/**
+	 * Sets timeout for reading.
+	 */
 	private void setClientTimeout() {
 		try {
 			this.socket.setSoTimeout(ServerConfig.CLIENT_TIMEOUT);

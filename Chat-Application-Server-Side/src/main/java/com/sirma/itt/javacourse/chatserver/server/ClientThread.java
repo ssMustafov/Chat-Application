@@ -11,6 +11,8 @@ import com.sirma.itt.javacourse.chatserver.commands.ServerCommandFactory;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
+ * Reads queries from the client. Every client has this thread working for him.
+ * 
  * @author Sinan
  */
 public class ClientThread implements Runnable {
@@ -21,6 +23,19 @@ public class ClientThread implements Runnable {
 	private Client client;
 	private QueryHandler handler;
 
+	/**
+	 * Creates a new client thread with given {@link ServerManager}, {@link Client} and {@link View}
+	 * of the server.
+	 * 
+	 * @param serverManager
+	 *            - the server's manager
+	 * @param socketsManager
+	 *            - the sockets manager
+	 * @param view
+	 *            - the server's view
+	 * @param client
+	 *            - the connected client
+	 */
 	public ClientThread(ServerManager serverManager, SocketsManager socketsManager, View view,
 			Client client) {
 		this.serverManager = serverManager;
@@ -30,6 +45,9 @@ public class ClientThread implements Runnable {
 		handler = this.socketsManager.getHandler(this.client.getId());
 	}
 
+	/**
+	 * Starts reading queries from the client in an infinite loop.
+	 */
 	public void start() {
 		new Thread(this).start();
 	}
@@ -65,6 +83,9 @@ public class ClientThread implements Runnable {
 		clearClient();
 	}
 
+	/**
+	 * Removes the client from the {@link ServerManager} and closes his {@link QueryHandler}.
+	 */
 	private void clearClient() {
 		if (client != null) {
 			serverManager.removeClient(client);
@@ -72,6 +93,12 @@ public class ClientThread implements Runnable {
 		}
 	}
 
+	/**
+	 * Handles given {@link Query} sent from the client.
+	 * 
+	 * @param query
+	 *            - the query sent from the client to be handled from {@link ServerCommand}
+	 */
 	private void handleClientQuery(Query query) {
 		ServerCommand command = ServerCommandFactory.createCommand(serverManager, socketsManager,
 				view, query);

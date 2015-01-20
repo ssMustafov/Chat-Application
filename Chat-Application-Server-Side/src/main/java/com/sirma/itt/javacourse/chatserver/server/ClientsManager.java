@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 
 /**
+ * Holds all the {@link Client}s in a {@link List}. Also can dispatch queries to all clients.
+ * 
  * @author Sinan
  */
 public class ClientsManager implements Runnable, ServerManager {
@@ -21,14 +23,24 @@ public class ClientsManager implements Runnable, ServerManager {
 	private List<Client> clients = new ArrayList<>();
 	private Queue<Query> queriesQueue = new LinkedList<>();
 
+	/**
+	 * Creates a new clients manager.
+	 */
 	public ClientsManager() {
 		new Thread(this).start();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void registerSocketsManager(SocketsManager socketsManager) {
 		this.socketsManager = socketsManager;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addClient(Client client) {
 		synchronized (clients) {
@@ -36,6 +48,9 @@ public class ClientsManager implements Runnable, ServerManager {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void removeClient(Client client) {
 		synchronized (clients) {
@@ -43,6 +58,9 @@ public class ClientsManager implements Runnable, ServerManager {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void dispatchQueryToAll(Query query) {
 		synchronized (queriesQueue) {
@@ -51,6 +69,9 @@ public class ClientsManager implements Runnable, ServerManager {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean containsClient(String nickname) {
 		synchronized (clients) {
@@ -64,6 +85,9 @@ public class ClientsManager implements Runnable, ServerManager {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void clear() {
 		synchronized (clients) {
@@ -74,16 +98,25 @@ public class ClientsManager implements Runnable, ServerManager {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Client> getClientsList() {
 		return clients;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getNumberOfOnlineClients() {
 		return clients.size();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getOnlineClientsNicknames() {
 		String nicknames = EMPTY_STRING;
@@ -104,6 +137,9 @@ public class ClientsManager implements Runnable, ServerManager {
 		return nicknames;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void run() {
 		while (true) {
@@ -114,6 +150,11 @@ public class ClientsManager implements Runnable, ServerManager {
 		}
 	}
 
+	/**
+	 * Returns the next {@code Query} from the queue.
+	 * 
+	 * @return - the next query from the queue
+	 */
 	private Query getNextQueryFromQueue() {
 		Query query = null;
 
@@ -131,6 +172,13 @@ public class ClientsManager implements Runnable, ServerManager {
 		return query;
 	}
 
+	/**
+	 * Sends given {@code Query} to the all clients.
+	 * 
+	 * @param query
+	 *            - the query that will be sent to all clients
+	 * @param query
+	 */
 	private void sendQueryToAll(Query query) {
 		synchronized (clients) {
 			for (Client client : clients) {

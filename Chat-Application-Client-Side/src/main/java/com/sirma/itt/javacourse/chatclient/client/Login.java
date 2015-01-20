@@ -17,7 +17,7 @@ public class Login implements Runnable {
 
 	private ServerFinder serverFinder;
 	private Socket socket;
-	private QueryHandler handler;
+	private QueryHandler queryHandler;
 	private LoginForm form;
 
 	public Login(LoginForm form) {
@@ -50,17 +50,18 @@ public class Login implements Runnable {
 		if (socket == null) {
 			form.showErrorDialog("No running server");
 		} else {
-			handler = new QueryHandler(socket);
+			queryHandler = new QueryHandler(socket);
 
 			String nickname = form.getNickname();
 			Query loginQuery = new Query(QueryTypes.Login, nickname);
-			handler.sendQuery(loginQuery);
+			queryHandler.sendQuery(loginQuery);
 
 			try {
-				Query answer = handler.readQuery();
+				Query answer = queryHandler.readQuery();
 				if (answer.getQueryType() == QueryTypes.LoggedIn) {
-					// form.dispose();
-
+					form.dispose();
+					Client client = new Client(queryHandler, nickname);
+					client.startThread();
 				} else {
 					form.showNoticeDialog(answer.getMessage());
 				}

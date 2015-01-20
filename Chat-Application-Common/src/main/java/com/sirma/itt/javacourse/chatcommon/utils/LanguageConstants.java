@@ -1,9 +1,12 @@
 package com.sirma.itt.javacourse.chatcommon.utils;
 
 /**
+ * Holds all the resource bundle keys for the internationalization.
+ * 
  * @author Sinan
  */
-public final class ServerLanguageConstants {
+public final class LanguageConstants {
+
 	public static final String TITLE_MESSAGE = "title";
 	public static final String CONSOLE_MESSAGE = "console";
 	public static final String ONLINE_CLIENTS_MESSAGE = "onlineClients";
@@ -18,4 +21,5 @@ public final class ServerLanguageConstants {
 	public static final String CLIENT_CONNECTED_MESSAGE = "clientConnected";
 	public static final String CLIENT_DISCONNECTED_MESSAGE = "clientDisconnected";
 	public static final String THREAD_STARTED_MESSAGE = "startedThread";
+
 }

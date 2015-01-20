@@ -6,6 +6,9 @@ import com.sirma.itt.javacourse.chatserver.server.SocketsManager;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
+ * Factory for creating {@link ServerCommand}s. These commands are handled by the server and sent
+ * from the clients.
+ * 
  * @author Sinan
  */
 public final class ServerCommandFactory {
@@ -17,6 +20,19 @@ public final class ServerCommandFactory {
 
 	}
 
+	/**
+	 * Creates a {@link ServerCommand}.
+	 * 
+	 * @param serverManager
+	 *            - the server's manager
+	 * @param socketsManager
+	 *            - the sockets manager
+	 * @param view
+	 *            - the view of the server
+	 * @param query
+	 *            - the client's query
+	 * @return - server command depending on the query type
+	 */
 	public static ServerCommand createCommand(ServerManager serverManager,
 			SocketsManager socketsManager, View view, Query query) {
 		ServerCommand command = null;

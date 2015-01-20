@@ -10,12 +10,27 @@ import com.sirma.itt.javacourse.chatserver.server.SocketsManager;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
+ * Handles {@link QueryTypes#SendMessage} query.
+ * 
  * @author Sinan
  */
 public class SendMessageCommand extends ServerCommand {
 
 	private Query query;
 
+	/**
+	 * Creates a new login command with given {@link ServerManager}, {@link SocketsManager},
+	 * {@link View} and {@link Query}.
+	 * 
+	 * @param serverManager
+	 *            - the server's manager
+	 * @param socketsManager
+	 *            - the sockets manager
+	 * @param view
+	 *            - the server's view
+	 * @param query
+	 *            - the client's query
+	 */
 	public SendMessageCommand(ServerManager serverManager, SocketsManager socketsManager,
 			View view, Query query) {
 		super(serverManager, socketsManager, view);

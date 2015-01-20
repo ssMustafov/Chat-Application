@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultCaret;
 
+import com.sirma.itt.javacourse.chatclient.client.Client;
 import com.sirma.itt.javacourse.chatcommon.utils.Date;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
@@ -47,17 +48,12 @@ public class ClientView implements View, ActionListener, KeyListener {
 	private JTextField clientField;
 	private ResourceBundle bundle = LanguageBundleSingleton.getClientBundleInstance();
 
-	public static void main(String[] args) {
-		new ClientView();
-	}
+	private Client client;
 
 	/**
 	 * Creates a new user interface for the server.
-	 * 
-	 * @param client
-	 *            - the client
 	 */
-	public ClientView() {
+	public ClientView(Client client) {
 		frame.setTitle(bundle.getString("title") + " - ");
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,7 +87,7 @@ public class ClientView implements View, ActionListener, KeyListener {
 		frame.add(bottomPanel, BorderLayout.PAGE_END);
 
 		frame.setVisible(true);
-
+		this.client = client;
 	}
 
 	/**
@@ -161,12 +157,12 @@ public class ClientView implements View, ActionListener, KeyListener {
 		String cmd = e.getActionCommand();
 		if (SEND_MESSAGE_BUTTON_ACTION_COMMAND.equals(cmd)) {
 			if (!Validator.isWhitespaceMessage(clientField.getText())) {
-				// client.sendMessage(clientField.getText());
+				client.sendMessage(clientField.getText());
 				clientField.setText("");
 			}
 			clientField.requestFocus();
 		} else if (LOGOUT_BUTTON_ACTION_COMMAND.equals(cmd)) {
-			// client.logout();
+			client.logout();
 			frame.dispose();
 			new LoginForm();
 		}
