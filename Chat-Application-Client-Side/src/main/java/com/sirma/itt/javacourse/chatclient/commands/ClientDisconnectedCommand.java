@@ -25,6 +25,7 @@ public class ClientDisconnectedCommand extends ClientCommand {
 	public void execute() {
 		String nickname = query.getMessage();
 		getClientView().removeOnlineClient(nickname);
+		getClientView().appendMessageToChatArea("@" + query.getMessage() + " left");
 	}
 
 }
