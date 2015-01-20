@@ -7,6 +7,13 @@ package com.sirma.itt.javacourse.chatcommon.utils;
  */
 public final class LanguageConstants {
 
+	/**
+	 * Protects from instantiation.
+	 */
+	private LanguageConstants() {
+
+	}
+
 	public static final String TITLE_MESSAGE = "title";
 	public static final String CONSOLE_MESSAGE = "console";
 	public static final String ONLINE_CLIENTS_MESSAGE = "onlineClients";

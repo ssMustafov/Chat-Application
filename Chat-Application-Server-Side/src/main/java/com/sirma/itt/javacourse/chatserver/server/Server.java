@@ -10,7 +10,9 @@ import java.util.ResourceBundle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
+import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
 import com.sirma.itt.javacourse.chatserver.views.View;
@@ -116,6 +118,7 @@ public class Server implements Runnable {
 	 */
 	public boolean stopServer() {
 		try {
+			serverManager.dispatchQueryToAll(new Query(QueryTypes.Closed, "The server is closed"));
 			serverSocket.close();
 			serverManager.clear();
 			socketsManager.clear();

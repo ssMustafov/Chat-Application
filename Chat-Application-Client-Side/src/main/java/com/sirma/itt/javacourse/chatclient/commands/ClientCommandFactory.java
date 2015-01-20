@@ -43,11 +43,26 @@ public final class ClientCommandFactory {
 				command = new ClientsNicknames(view, query);
 				break;
 
+			case SentMessage:
+				command = new SentMessageCommand(view, query);
+				break;
+
+			case ClientConnected:
+				command = new ClientConnectedCommand(view, query);
+				break;
+
+			case ClientDisconnected:
+				command = new ClientDisconnectedCommand(view, query);
+				break;
+
+			case Closed:
+				command = new ClosedCommand(view, query);
+				break;
+
 			default:
 				throw new IllegalArgumentException("Not supported command: " + query.getQueryType());
 		}
 
 		return command;
 	}
-
 }

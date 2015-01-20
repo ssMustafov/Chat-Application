@@ -12,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 
 /**
+ * Searches for the server at defined ports range in {@link ServerConfig}. If the server is found it
+ * returns a client socket via the method {@link SwingWorker#get()}.
+ * 
  * @author Sinan
  */
 public final class ServerFinder extends SwingWorker<Socket, Void> {
@@ -22,6 +25,12 @@ public final class ServerFinder extends SwingWorker<Socket, Void> {
 
 	private JProgressBar progressBar;
 
+	/**
+	 * Creates a new server finder with given progress bar.
+	 * 
+	 * @param progressBar
+	 *            - the progress bar of the login form
+	 */
 	public ServerFinder(JProgressBar progressBar) {
 		this.progressBar = progressBar;
 	}
