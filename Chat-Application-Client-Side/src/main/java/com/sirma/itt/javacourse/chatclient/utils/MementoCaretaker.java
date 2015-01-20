@@ -1,6 +1,6 @@
 package com.sirma.itt.javacourse.chatclient.utils;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -10,7 +10,8 @@ import java.util.List;
  * @author Sinan
  */
 public class MementoCaretaker {
-	private List<MessageMemento> savedMementos = new ArrayList<>();
+	private static final int MAX_SIZE = 10;
+	private List<MessageMemento> savedMementos = new LinkedList<>();
 	private int index = -1;
 
 	/**
@@ -22,6 +23,10 @@ public class MementoCaretaker {
 	public void addMemento(MessageMemento memento) {
 		savedMementos.add(memento);
 		index = -1;
+
+		if (savedMementos.size() == MAX_SIZE) {
+			savedMementos.remove(0);
+		}
 	}
 
 	/**

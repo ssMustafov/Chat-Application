@@ -4,7 +4,7 @@ import com.sirma.itt.javacourse.chatclient.views.View;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 
 /**
- * Handles sent from the server connected client's nicknames.
+ * Handles list of connected client's nicknames. Sent from the server when client logs in.
  * 
  * @author Sinan
  */

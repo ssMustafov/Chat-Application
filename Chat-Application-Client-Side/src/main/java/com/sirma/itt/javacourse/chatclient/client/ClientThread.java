@@ -2,6 +2,9 @@ package com.sirma.itt.javacourse.chatclient.client;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.sirma.itt.javacourse.chatclient.commands.ClientCommand;
 import com.sirma.itt.javacourse.chatclient.commands.ClientCommandFactory;
 import com.sirma.itt.javacourse.chatclient.views.View;
@@ -10,10 +13,13 @@ import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 
 /**
+ * For every client is created this thread for reading {@link Query}s from the server.
+ * 
  * @author Sinan
  */
 public class ClientThread implements Runnable {
 
+	private static final Logger LOGGER = LogManager.getLogger(ClientThread.class);
 	private QueryHandler queryHandler;
 	private View view;
 	private boolean isRunning = false;
@@ -47,14 +53,14 @@ public class ClientThread implements Runnable {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		queryHandler.closeStreams();
 	}
 
 	/**
-	 * Starts this thread.
+	 * Starts the clients thread.
 	 */
 	public void start() {
 		isRunning = true;
@@ -62,7 +68,7 @@ public class ClientThread implements Runnable {
 	}
 
 	/**
-	 * Stops this thread.
+	 * Stops the clients thread.
 	 */
 	public void stop() {
 		isRunning = false;

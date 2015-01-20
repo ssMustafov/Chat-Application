@@ -5,8 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -27,7 +27,7 @@ import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
  * 
  * @author Sinan
  */
-public class LoginForm implements ActionListener, KeyListener {
+public class LoginForm implements ActionListener {
 
 	private static final String LOGIN_BUTTON_ACTION_COMMAND = "login";
 	private static final String LANG_LIST_ACTION_COMMAND = "langList";
@@ -95,15 +95,23 @@ public class LoginForm implements ActionListener, KeyListener {
 	}
 
 	/**
-	 * 
+	 * Creates the fields of the form.
 	 */
 	private void createFields() {
 		nicknameField = new JTextField(20);
-		nicknameField.addKeyListener(this);
+		nicknameField.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					loginButton.doClick();
+				}
+			}
+		});
 	}
 
 	/**
-	 * 
+	 * Creates the labels of the form.
 	 */
 	private void createLabels() {
 		label = new JLabel(bundle.getString("enterNickname"));
@@ -175,7 +183,7 @@ public class LoginForm implements ActionListener, KeyListener {
 	}
 
 	/**
-	 * 
+	 * Sets the language.
 	 */
 	private void setLanguage() {
 		ResourceBundle.clearCache();
@@ -192,7 +200,7 @@ public class LoginForm implements ActionListener, KeyListener {
 	}
 
 	/**
-	 * 
+	 * Connects to the server and loges the user.
 	 */
 	private void connectToServer() {
 		Login login = new Login(this);
@@ -224,38 +232,13 @@ public class LoginForm implements ActionListener, KeyListener {
 		progressBar.setVisible(false);
 	}
 
+	/**
+	 * Returns the {@link JProgressBar} of the form.
+	 * 
+	 * @return - the {@link JProgressBar} of the form
+	 */
 	public JProgressBar getProgressBar() {
 		return progressBar;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void keyTyped(KeyEvent e) {
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			loginButton.doClick();
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void keyReleased(KeyEvent e) {
-
-	}
-
-	public static void main(String[] args) {
-		new LoginForm();
 	}
 
 }

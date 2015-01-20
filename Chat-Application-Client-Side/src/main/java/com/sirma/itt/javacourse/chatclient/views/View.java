@@ -55,5 +55,8 @@ public interface View {
 	 */
 	void clearOnlineClientsList();
 
+	/**
+	 * Disposes the view.
+	 */
 	void dispose();
 }

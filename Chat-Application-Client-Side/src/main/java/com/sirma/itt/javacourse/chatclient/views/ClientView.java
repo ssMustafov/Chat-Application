@@ -3,8 +3,8 @@ package com.sirma.itt.javacourse.chatclient.views;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
@@ -21,6 +21,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultCaret;
 
 import com.sirma.itt.javacourse.chatclient.client.Client;
+import com.sirma.itt.javacourse.chatclient.utils.MementoCaretaker;
+import com.sirma.itt.javacourse.chatclient.utils.MessageMemento;
 import com.sirma.itt.javacourse.chatcommon.utils.Date;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
@@ -31,7 +33,7 @@ import com.sirma.itt.javacourse.chatcommon.utils.Validator;
  * 
  * @author Sinan
  */
-public class ClientView implements View, ActionListener, KeyListener {
+public class ClientView implements View, ActionListener {
 	public static final String SEND_MESSAGE_BUTTON_ACTION_COMMAND = "send";
 	public static final String LOGOUT_BUTTON_ACTION_COMMAND = "logout";
 	public static final String DISCONNECT_BUTTON_ACTION_COMMAND = "disconnect";
@@ -46,12 +48,16 @@ public class ClientView implements View, ActionListener, KeyListener {
 	private JButton sendMessageButton;
 	private JTextArea chatMessagesArea;
 	private JTextField clientField;
+	private MementoCaretaker mementos = new MementoCaretaker();
 	private ResourceBundle bundle = LanguageBundleSingleton.getClientBundleInstance();
 
 	private Client client;
 
 	/**
-	 * Creates a new user interface for the server.
+	 * Creates a new user interface for the client.
+	 * 
+	 * @param client
+	 *            - the client
 	 */
 	public ClientView(Client client) {
 		frame.setTitle(bundle.getString("title") + " - " + client.getNickname());
@@ -153,11 +159,21 @@ public class ClientView implements View, ActionListener, KeyListener {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void dispose() {
+		frame.dispose();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (SEND_MESSAGE_BUTTON_ACTION_COMMAND.equals(cmd)) {
 			if (!Validator.isWhitespaceMessage(clientField.getText())) {
-				client.sendMessage(clientField.getText());
+				String message = clientField.getText();
+				client.sendMessage(message);
+				mementos.addMemento(new MessageMemento(message));
 				clientField.setText("");
 			}
 			clientField.requestFocus();
@@ -207,43 +223,27 @@ public class ClientView implements View, ActionListener, KeyListener {
 	 */
 	private void createFields() {
 		clientField = new JTextField(35);
-		clientField.addKeyListener(this);
 		clientField.setDocument(new DocumentLengthFilter(
 				ServerConfig.CLIENT_CHAT_MESSAGE_MAX_LENGTH));
-	}
+		clientField.addKeyListener(new KeyAdapter() {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void keyTyped(KeyEvent e) {
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			sendMessageButton.doClick();
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void keyReleased(KeyEvent e) {
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void dispose() {
-		frame.dispose();
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					sendMessageButton.doClick();
+				} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+					MessageMemento message = mementos.getNextMemento();
+					if (message != null) {
+						clientField.setText(message.getMessage());
+					}
+				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					MessageMemento message = mementos.getPreviousMemento();
+					if (message != null) {
+						clientField.setText(message.getMessage());
+					}
+				}
+			}
+		});
 	}
 
 }

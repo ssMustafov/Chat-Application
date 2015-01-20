@@ -7,6 +7,8 @@ import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 
 /**
+ * Represents the client in the client side.
+ * 
  * @author Sinan
  */
 public class Client {
@@ -17,8 +19,12 @@ public class Client {
 	private String nickname;
 
 	/**
+	 * Creates a new client with given {@link QueryHandler} and nickname of the client.
+	 * 
 	 * @param queryHandler
+	 *            - the query handler of the client
 	 * @param nickname
+	 *            - the nickname of the client
 	 */
 	public Client(QueryHandler queryHandler, String nickname) {
 		this.queryHandler = queryHandler;
