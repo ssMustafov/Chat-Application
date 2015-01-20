@@ -24,8 +24,8 @@ import javax.swing.text.DefaultCaret;
 
 import com.sirma.itt.javacourse.chatcommon.utils.Date;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
-import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
+import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 import com.sirma.itt.javacourse.chatserver.server.Server;
 
 /**
@@ -72,6 +72,7 @@ public class ServerView implements View, ActionListener {
 		createComboBoxes();
 		createTextAreas();
 		createLists();
+		setOnWindowClosing();
 
 		consoleScrollPane = new JScrollPane();
 		consoleScrollPane.setViewportView(consoleArea);
@@ -104,17 +105,6 @@ public class ServerView implements View, ActionListener {
 		frame.add(bottomPanel, BorderLayout.PAGE_END);
 
 		frame.setVisible(true);
-		frame.addWindowListener(new WindowAdapter() {
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if (server != null) {
-					server.stopServer();
-				}
-
-				super.windowClosing(e);
-			}
-		});
 	}
 
 	/**
@@ -282,7 +272,24 @@ public class ServerView implements View, ActionListener {
 	}
 
 	/**
-	 * 
+	 * Sets the server to stop on closing the window.
+	 */
+	private void setOnWindowClosing() {
+		frame.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (server != null) {
+					server.stopServer();
+				}
+
+				super.windowClosing(e);
+			}
+		});
+	}
+
+	/**
+	 * Creates the lists in the view.
 	 */
 	private void createLists() {
 		onlineClientsListModel = new DefaultListModel<String>();
