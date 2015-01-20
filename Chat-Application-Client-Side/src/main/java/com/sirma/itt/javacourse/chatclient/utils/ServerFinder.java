@@ -3,62 +3,52 @@ package com.sirma.itt.javacourse.chatclient.utils;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 
 /**
- * Holds method for finding the server's socket.
- * 
  * @author Sinan
  */
-public final class ServerFinder {
+public final class ServerFinder extends SwingWorker<Socket, Void> {
+	private static final Logger LOGGER = LogManager.getLogger(ServerFinder.class);
+	private static final int MIN_PORT = Integer.parseInt(ServerConfig.SERVER_PORTS[0]);
+	private static final int MAX_PORT = Integer
+			.parseInt(ServerConfig.SERVER_PORTS[ServerConfig.SERVER_PORTS.length - 1]);
 
-	private static int[] serverPorts;
+	private JProgressBar progressBar;
 
-	/**
-	 * Protects from instantiation.
-	 */
-	private ServerFinder() {
-
-	}
-
-	static {
-		serverPorts = parseStringArrayToIntArray(ServerConfig.SERVER_PORTS);
+	public ServerFinder(JProgressBar progressBar) {
+		this.progressBar = progressBar;
 	}
 
 	/**
-	 * Parses given string array into int array.
-	 * 
-	 * @param array
-	 *            - the array of string to be parsed
-	 * @return - the parsed to int array, string array
+	 * {@inheritDoc}
 	 */
-	private static int[] parseStringArrayToIntArray(String[] array) {
-		int[] parsedArray = new int[array.length];
-		for (int i = 0; i < array.length; i++) {
-			parsedArray[i] = Integer.parseInt(array[i]);
-		}
-		return parsedArray;
-	}
+	@Override
+	protected Socket doInBackground() throws Exception {
+		progressBar.setVisible(true);
 
-	/**
-	 * Finds and connects to the server. It searches for server in the ports range defined in
-	 * {@link ServerConfig#SERVER_PORTS}.
-	 * 
-	 * @return - the socket of the server
-	 * @throws IOException
-	 *             - thrown when there is no running server in the ports range
-	 */
-	public static Socket openSocket() throws IOException {
-		for (int i = 0; i < serverPorts.length; i++) {
+		for (int port = MIN_PORT; port <= MAX_PORT; port++) {
 			try {
-				return new Socket("localhost", serverPorts[i]);
+				return new Socket(ServerConfig.HOST, port);
 			} catch (IOException e) {
-				// try the next port
+				LOGGER.info("Searching server in port: " + port);
 			}
 		}
 
-		throw new IOException(String.format("No running server sockets in ports range [%s...%s]",
-				serverPorts[0], serverPorts[serverPorts.length - 1]));
+		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void done() {
+		progressBar.setVisible(false);
+	}
 }

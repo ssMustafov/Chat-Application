@@ -4,7 +4,6 @@ package com.sirma.itt.javacourse.chatserver.views;
  * @author Sinan
  */
 public interface View {
-	String START_BUTTON_ACTION_COMMAND = "start";
 
 	/**
 	 * Appends a given message to the console area.

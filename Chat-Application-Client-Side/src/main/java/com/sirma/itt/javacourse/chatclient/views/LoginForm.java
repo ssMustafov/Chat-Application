@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 import com.sirma.itt.javacourse.chatclient.client.Login;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
-import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 
 /**
  * Represents the login form of the client chat application.
@@ -36,11 +35,11 @@ public class LoginForm implements ActionListener, KeyListener {
 	private JFrame frame;
 	private JTextField nicknameField;
 	private JButton loginButton;
-	private JProgressBar progressBar;
 	private JComboBox<?> langList;
+	private JProgressBar progressBar;
 	private JLabel label;
 	private ResourceBundle bundle = LanguageBundleSingleton.getClientLoginBundleInstance();
-	private String language = ENGLISH_STRING;
+	private String language = ServerConfig.AVAILABLE_LANGUAGES[0];
 
 	/**
 	 * Creates a new login form.
@@ -56,12 +55,10 @@ public class LoginForm implements ActionListener, KeyListener {
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		createButtons();
-		createProgressBar();
 		createComboBoxes();
-
-		label = new JLabel(bundle.getString("enterNickname"));
-		nicknameField = new JTextField(20);
-		nicknameField.addKeyListener(this);
+		createProgressBar();
+		createLabels();
+		createFields();
 
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.ipady = 0;
@@ -88,13 +85,28 @@ public class LoginForm implements ActionListener, KeyListener {
 		constraints.gridy = 3;
 		frame.getContentPane().add(loginButton, constraints);
 
-		constraints.insets = new Insets(50, 0, 0, 0);
+		constraints.insets = new Insets(40, 0, 0, 0);
 		constraints.ipady = 5;
 		constraints.gridx = 0;
 		constraints.gridy = 4;
 		frame.getContentPane().add(progressBar, constraints);
 
 		frame.setVisible(true);
+	}
+
+	/**
+	 * 
+	 */
+	private void createFields() {
+		nicknameField = new JTextField(20);
+		nicknameField.addKeyListener(this);
+	}
+
+	/**
+	 * 
+	 */
+	private void createLabels() {
+		label = new JLabel(bundle.getString("enterNickname"));
 	}
 
 	/**
@@ -127,15 +139,6 @@ public class LoginForm implements ActionListener, KeyListener {
 	}
 
 	/**
-	 * Creates the progress bar.
-	 */
-	private void createProgressBar() {
-		progressBar = new JProgressBar();
-		progressBar.setIndeterminate(true);
-		progressBar.setVisible(false);
-	}
-
-	/**
 	 * Creates the buttons.
 	 */
 	private void createButtons() {
@@ -145,7 +148,7 @@ public class LoginForm implements ActionListener, KeyListener {
 	}
 
 	/**
-	 * Creates the comboxes.
+	 * Creates the combo boxes.
 	 */
 	private void createComboBoxes() {
 		langList = new JComboBox<>(ServerConfig.AVAILABLE_LANGUAGES);
@@ -161,22 +164,6 @@ public class LoginForm implements ActionListener, KeyListener {
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (LOGIN_BUTTON_ACTION_COMMAND.equals(cmd)) {
-			String nickname = nicknameField.getText();
-			if (nickname.isEmpty()) {
-				showNoticeDialog(bundle.getString("emptyNickname"));
-				return;
-			}
-			if (!Validator.isValidNickname(nickname)) {
-				showNoticeDialog(bundle.getString("invalidNickname"));
-				return;
-			}
-			if (nickname.length() > Validator.MAX_NICKNAME_LENGHT) {
-				showNoticeDialog(bundle.getString("maxAllowedNicknameLength")
-						+ Validator.MAX_NICKNAME_LENGHT + ". "
-						+ bundle.getString("yourNicknameLength") + nickname.length());
-				return;
-			}
-
 			connectToServer();
 		} else if (LANG_LIST_ACTION_COMMAND.equals(cmd)) {
 			JComboBox<?> cb = (JComboBox<?>) e.getSource();
@@ -210,7 +197,6 @@ public class LoginForm implements ActionListener, KeyListener {
 	private void connectToServer() {
 		Login login = new Login(this);
 		login.connectToServer();
-		login.start();
 	}
 
 	/**
@@ -227,6 +213,19 @@ public class LoginForm implements ActionListener, KeyListener {
 		frame.setTitle(bundle.getString("loginTitle"));
 		label.setText(bundle.getString("enterNickname"));
 		loginButton.setText(bundle.getString("login"));
+	}
+
+	/**
+	 * Creates the progress bar.
+	 */
+	private void createProgressBar() {
+		progressBar = new JProgressBar();
+		progressBar.setIndeterminate(true);
+		progressBar.setVisible(false);
+	}
+
+	public JProgressBar getProgressBar() {
+		return progressBar;
 	}
 
 	/**
@@ -253,6 +252,10 @@ public class LoginForm implements ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 
+	}
+
+	public static void main(String[] args) {
+		new LoginForm();
 	}
 
 }

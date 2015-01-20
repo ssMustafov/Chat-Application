@@ -1,8 +1,8 @@
 package com.sirma.itt.javacourse.chatclient.commands;
 
 import com.sirma.itt.javacourse.chatclient.views.View;
-import com.sirma.itt.javacourse.chatcommon.utils.Query;
-import com.sirma.itt.javacourse.chatcommon.utils.QueryTypes;
+import com.sirma.itt.javacourse.chatcommon.models.Query;
+import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 
 /**
  * Holds method for creating {@link ClientCommand}s.
@@ -31,23 +31,9 @@ public final class ClientCommandFactory {
 		ClientCommand command = null;
 
 		switch (query.getQueryType()) {
-			case Success:
-				command = new SuccesCommand(view, query);
-				break;
-			case SentMessage:
-				command = new SentMessageCommand(view, query);
-				break;
-			case ClientConnected:
-				command = new ClientConnectedCommand(view, query);
-				break;
-			case ClientDisconnected:
-				command = new ClientDisconnectedCommand(view, query);
-				break;
-			case LoggedIn:
-				command = new LoggedInCommand(view, query);
-				break;
+
 			case Closed:
-				command = new ClosedCommand(view, query);
+				// command = new ClosedCommand(view, query);
 				break;
 
 			default:

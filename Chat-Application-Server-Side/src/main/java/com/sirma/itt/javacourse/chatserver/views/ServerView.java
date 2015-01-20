@@ -3,6 +3,8 @@ package com.sirma.itt.javacourse.chatserver.views;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.ResourceBundle;
@@ -24,14 +26,17 @@ import javax.swing.text.DefaultCaret;
 import com.sirma.itt.javacourse.chatcommon.utils.Date;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
+import com.sirma.itt.javacourse.chatcommon.utils.ServerLanguageConstants;
+import com.sirma.itt.javacourse.chatserver.server.Server;
 
 /**
  * Represents the user interface for the server. Extends {@link Observable}.
  * 
  * @author Sinan
  */
-public class ServerView extends Observable implements View, ActionListener {
-	public static final String START_BUTTON_ACTION_COMMAND = "start";
+public class ServerView implements View, ActionListener {
+	private static final String LANG_LIST_ACTION_COMMAND = "langList";
+	private static final String PORT_LIST_ACTION_COMMAND = "portList";
 	private static final String NEW_LINE = System.lineSeparator();
 	private static final int WINDOW_WIDTH = 600;
 	private static final int WINDOW_HEIGHT = 400;
@@ -53,11 +58,13 @@ public class ServerView extends Observable implements View, ActionListener {
 	private int port = Integer.parseInt(ServerConfig.SERVER_PORTS[0]);
 	private String language = "English";
 
+	private Server server;
+
 	/**
 	 * Creates a new user interface for the server.
 	 */
 	public ServerView() {
-		frame.setTitle(bundle.getString("title"));
+		frame.setTitle(bundle.getString(ServerLanguageConstants.TITLE_MESSAGE));
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -70,13 +77,14 @@ public class ServerView extends Observable implements View, ActionListener {
 		consoleScrollPane = new JScrollPane();
 		consoleScrollPane.setViewportView(consoleArea);
 
-		TitledBorder consoleBorder = BorderFactory.createTitledBorder(bundle.getString("console"));
+		TitledBorder consoleBorder = BorderFactory.createTitledBorder(bundle
+				.getString(ServerLanguageConstants.CONSOLE_MESSAGE));
 		consoleBorder.setTitleJustification(TitledBorder.LEFT);
 		consoleScrollPane.setBorder(consoleBorder);
 
 		listScrollPane = new JScrollPane(onlineClientsList);
 		TitledBorder onlineClientsBorder = BorderFactory.createTitledBorder(bundle
-				.getString("onlineClients"));
+				.getString(ServerLanguageConstants.ONLINE_CLIENTS_MESSAGE));
 		onlineClientsBorder.setTitleJustification(TitledBorder.CENTER);
 		listScrollPane.setBorder(onlineClientsBorder);
 
@@ -97,6 +105,17 @@ public class ServerView extends Observable implements View, ActionListener {
 		frame.add(bottomPanel, BorderLayout.PAGE_END);
 
 		frame.setVisible(true);
+		frame.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (server != null) {
+					server.stopServer();
+				}
+
+				super.windowClosing(e);
+			}
+		});
 	}
 
 	/**
@@ -165,28 +184,12 @@ public class ServerView extends Observable implements View, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		if (START_BUTTON_ACTION_COMMAND.equals(cmd)) {
-			startButton.setEnabled(false);
-			stopButton.setEnabled(true);
-			portList.setEnabled(false);
-			langList.setEnabled(false);
-
-			setChanged();
-			notifyObservers(cmd);
-		} else if ("stop".equals(cmd)) {
-			startButton.setEnabled(true);
-			stopButton.setEnabled(false);
-			portList.setEnabled(true);
-			langList.setEnabled(true);
-
-			setChanged();
-			notifyObservers(cmd);
-		} else if ("langList".equals(cmd)) {
+		if (LANG_LIST_ACTION_COMMAND.equals(cmd)) {
 			JComboBox<?> cb = (JComboBox<?>) e.getSource();
 			language = (String) cb.getSelectedItem();
 
 			ResourceBundle.clearCache();
-			if ("English".equals(language)) {
+			if (ServerConfig.AVAILABLE_LANGUAGES[0].equals(language)) {
 				LanguageBundleSingleton.setServerLocale(Locale.US);
 				bundle = LanguageBundleSingleton.getServerBundleInstance();
 			} else {
@@ -198,9 +201,6 @@ public class ServerView extends Observable implements View, ActionListener {
 			JComboBox<?> cb = (JComboBox<?>) e.getSource();
 			String stringPort = (String) cb.getSelectedItem();
 			port = Integer.parseInt(stringPort);
-
-			setChanged();
-			notifyObservers(port);
 		}
 	}
 
@@ -208,8 +208,8 @@ public class ServerView extends Observable implements View, ActionListener {
 	 * Initializes the labels.
 	 */
 	private void createLabels() {
-		labelLang = new JLabel(bundle.getString("chooseLang"));
-		labelPort = new JLabel(bundle.getString("choosePort"));
+		labelLang = new JLabel(bundle.getString(ServerLanguageConstants.CHOOSE_LANGUAGE_MESSAGE));
+		labelPort = new JLabel(bundle.getString(ServerLanguageConstants.CHOOSE_PORT_MESSAGE));
 	}
 
 	/**
@@ -224,32 +224,59 @@ public class ServerView extends Observable implements View, ActionListener {
 	}
 
 	/**
-	 * Creates the comboxes.
+	 * Creates the combo boxes.
 	 */
 	private void createComboBoxes() {
 		langList = new JComboBox<>(ServerConfig.AVAILABLE_LANGUAGES);
-		langList.setActionCommand("langList");
+		langList.setActionCommand(LANG_LIST_ACTION_COMMAND);
 		langList.setSelectedIndex(0);
 		langList.addActionListener(this);
 
 		portList = new JComboBox<>(ServerConfig.SERVER_PORTS);
-		portList.setActionCommand("portList");
+		portList.setActionCommand(PORT_LIST_ACTION_COMMAND);
 		portList.setSelectedIndex(0);
 		portList.addActionListener(this);
+	}
+
+	public static void main(String[] args) {
+		new ServerView();
 	}
 
 	/**
 	 * Creates the buttons.
 	 */
 	private void createButtons() {
-		startButton = new JButton(bundle.getString("start"));
-		startButton.setActionCommand("start");
-		startButton.addActionListener(this);
+		startButton = new JButton(bundle.getString(ServerLanguageConstants.START_SERVER_MESSAGE));
+		startButton.addActionListener(new ActionListener() {
 
-		stopButton = new JButton(bundle.getString("stop"));
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				server = new Server(ServerView.this, port);
+				server.startServer();
+
+				startButton.setEnabled(false);
+				stopButton.setEnabled(true);
+				langList.setEnabled(false);
+				portList.setEnabled(false);
+			}
+		});
+
+		stopButton = new JButton(bundle.getString(ServerLanguageConstants.STOP_SERVER_MESSAGE));
 		stopButton.setEnabled(false);
-		stopButton.setActionCommand("stop");
-		stopButton.addActionListener(this);
+		stopButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (server != null) {
+					server.stopServer();
+
+					startButton.setEnabled(true);
+					stopButton.setEnabled(false);
+					langList.setEnabled(true);
+					portList.setEnabled(true);
+				}
+			}
+		});
 	}
 
 	/**
@@ -266,20 +293,21 @@ public class ServerView extends Observable implements View, ActionListener {
 	 * Updates the text of the UI elements. Must be invoked when the locale is changed.
 	 */
 	private void onLocaleChange() {
-		TitledBorder consoleBorder = BorderFactory.createTitledBorder(bundle.getString("console"));
+		TitledBorder consoleBorder = BorderFactory.createTitledBorder(bundle
+				.getString(ServerLanguageConstants.CONSOLE_MESSAGE));
 		consoleBorder.setTitleJustification(TitledBorder.LEFT);
 		consoleScrollPane.setBorder(consoleBorder);
 
 		TitledBorder onlineClientsBorder = BorderFactory.createTitledBorder(bundle
-				.getString("onlineClients"));
+				.getString(ServerLanguageConstants.ONLINE_CLIENTS_MESSAGE));
 		onlineClientsBorder.setTitleJustification(TitledBorder.CENTER);
 		listScrollPane.setBorder(onlineClientsBorder);
 
-		frame.setTitle(bundle.getString("title"));
-		startButton.setText(bundle.getString("start"));
-		stopButton.setText(bundle.getString("stop"));
-		labelLang.setText(bundle.getString("chooseLang"));
-		labelPort.setText(bundle.getString("choosePort"));
+		frame.setTitle(bundle.getString(ServerLanguageConstants.TITLE_MESSAGE));
+		startButton.setText(bundle.getString(ServerLanguageConstants.START_SERVER_MESSAGE));
+		stopButton.setText(bundle.getString(ServerLanguageConstants.STOP_SERVER_MESSAGE));
+		labelLang.setText(bundle.getString(ServerLanguageConstants.CHOOSE_LANGUAGE_MESSAGE));
+		labelPort.setText(bundle.getString(ServerLanguageConstants.CHOOSE_PORT_MESSAGE));
 	}
 
 }

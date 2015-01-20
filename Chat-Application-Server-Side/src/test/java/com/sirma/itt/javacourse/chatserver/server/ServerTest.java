@@ -1,147 +1,42 @@
 package com.sirma.itt.javacourse.chatserver.server;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.net.Socket;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import com.sirma.itt.javacourse.chatcommon.utils.Query;
-import com.sirma.itt.javacourse.chatcommon.utils.QueryHandler;
-import com.sirma.itt.javacourse.chatcommon.utils.QueryTypes;
-import com.sirma.itt.javacourse.chatserver.views.MockView;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
- * Tests {@link com.sirma.itt.javacourse.chatserver.server.Server} class.
- * 
- * @author smustafov
+ * @author Sinan
  */
 public class ServerTest {
 
-	private static final Logger LOGGER = LogManager.getLogger(ServerTest.class);
-	private final String host = "localhost";
-	private final int testPort = 7000;
+	private View view;
 	private Server server;
-	private View view = new MockView();
-
-	private Socket testClient;
 
 	/**
-	 * 
+	 *
 	 */
 	@Before
 	public void setUp() {
-		server = new Server(view, testPort);
-		server.startServer();
+		view = Mockito.mock(View.class);
+		server = new Server(view, 7000);
 	}
 
-	/**
-	 * 
-	 */
-	@After
-	public void tearDown() {
+	@Test
+	public void testStartServer() {
+		boolean isServerStarted = server.startServer();
+		assertTrue(isServerStarted);
 		server.stopServer();
 	}
 
-	/**
-	 * Tests login into server with valid client.
-	 */
 	@Test
-	public void testServerLoginWithValidClient() {
-		try {
-			testClient = new Socket(host, testPort);
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
-		QueryHandler queryHandler = new QueryHandler(testClient);
-		queryHandler.sendQuery(new Query(QueryTypes.Login, "Test"));
-		Query answer = queryHandler.readQuery();
-		queryHandler.sendQuery(new Query(QueryTypes.Logout, "Test"));
-
-		assertEquals(QueryTypes.Success, answer.getQueryType());
-	}
-
-	/**
-	 * Tests login into server with invalid client.
-	 */
-	@Test
-	public void testServerLoginInvalidClient() {
-		try {
-			testClient = new Socket(host, testPort);
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
-		QueryHandler queryHandler = new QueryHandler(testClient);
-		queryHandler.sendQuery(new Query(QueryTypes.Login, "clie[]nt"));
-		Query answer = queryHandler.readQuery();
-
-		assertEquals(QueryTypes.Refused, answer.getQueryType());
-	}
-
-	/**
-	 * Tests client logout.
-	 */
-	@Test
-	public void testServerLogout() {
-		try {
-			testClient = new Socket(host, testPort);
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
-		QueryHandler queryHandler = new QueryHandler(testClient);
-		queryHandler.sendQuery(new Query(QueryTypes.Login, "Client"));
-
-		queryHandler.sendQuery(new Query(QueryTypes.Logout, "Client"));
-		Query answer = queryHandler.readQuery();
-
-		assertEquals(QueryTypes.Success, answer.getQueryType());
-	}
-
-	/**
-	 * Tests client logout without client login.
-	 */
-	@Test
-	public void testServerLogoutWitoutLogin() {
-		try {
-			testClient = new Socket(host, testPort);
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
-		QueryHandler queryHandler = new QueryHandler(testClient);
-
-		queryHandler.sendQuery(new Query(QueryTypes.Logout, "Client"));
-		Query answer = queryHandler.readQuery();
-
-		assertEquals(QueryTypes.Refused, answer.getQueryType());
-	}
-
-	/**
-	 * Tests client send message without client login.
-	 */
-	@Test
-	public void testServerSendMessageWitoutLogin() {
-		try {
-			testClient = new Socket(host, testPort);
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
-		QueryHandler queryHandler = new QueryHandler(testClient);
-
-		queryHandler.sendQuery(new Query(QueryTypes.SendMessage, "hello"));
-		Query answer = queryHandler.readQuery();
-
-		assertEquals(QueryTypes.Refused, answer.getQueryType());
+	public void testStopServer() {
+		server.startServer();
+		boolean isServerStopped = server.stopServer();
+		assertTrue(isServerStopped);
 	}
 
 }

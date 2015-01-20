@@ -3,7 +3,6 @@ package com.sirma.itt.javacourse.chatserver.main;
 import javax.swing.SwingUtilities;
 
 import com.sirma.itt.javacourse.chatserver.views.ServerView;
-import com.sirma.itt.javacourse.chatserver.views.ViewObserver;
 
 /**
  * Runs the server of the chat application.
@@ -30,9 +29,7 @@ public final class Run {
 
 			@Override
 			public void run() {
-				ServerView view = new ServerView();
-				ViewObserver viewObserver = new ViewObserver();
-				view.addObserver(viewObserver);
+				new ServerView();
 			}
 		});
 	}

@@ -1,34 +1,25 @@
 package com.sirma.itt.javacourse.chatserver.commands;
 
-import com.sirma.itt.javacourse.chatcommon.utils.Query;
-import com.sirma.itt.javacourse.chatcommon.utils.QueryTypes;
+import com.sirma.itt.javacourse.chatcommon.models.Client;
+import com.sirma.itt.javacourse.chatcommon.models.Query;
+import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
+import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.Validator;
-import com.sirma.itt.javacourse.chatserver.server.Client;
-import com.sirma.itt.javacourse.chatserver.server.ServerDispatcher;
+import com.sirma.itt.javacourse.chatserver.server.ServerManager;
+import com.sirma.itt.javacourse.chatserver.server.SocketsManager;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
- * Handles queries when client sends message.
- * 
  * @author Sinan
  */
 public class SendMessageCommand extends ServerCommand {
 
-	private Query clientQuery;
+	private Query query;
 
-	/**
-	 * Creates a new send message command.
-	 * 
-	 * @param serverDispatcher
-	 *            - the server dispatcher
-	 * @param view
-	 *            - the view of the server
-	 * @param clientQuery
-	 *            - client's query
-	 */
-	public SendMessageCommand(ServerDispatcher serverDispatcher, View view, Query clientQuery) {
-		super(serverDispatcher, view);
-		this.clientQuery = clientQuery;
+	public SendMessageCommand(ServerManager serverManager, SocketsManager socketsManager,
+			View view, Query query) {
+		super(serverManager, socketsManager, view);
+		this.query = query;
 	}
 
 	/**
@@ -36,17 +27,17 @@ public class SendMessageCommand extends ServerCommand {
 	 */
 	@Override
 	public void execute(Client client) {
-		if (!getServerDispatcher().containsClient(client.getNickname())) {
-			client.sendQuery(new Query(QueryTypes.Refused, "You're not logged in"));
+		QueryHandler handler = getSocketsManager().getHandler(client.getId());
+		if (!getServerManager().containsClient(client.getNickname())) {
+			handler.sendQuery(new Query(QueryTypes.Refused, "You're not logged in"));
 			return;
 		}
 
-		String clientMessage = clientQuery.getMessage();
-		String capitalizedMessage = Validator.capitalizeFirstLetter(clientMessage);
-
+		String message = query.getMessage();
+		String capitalizedMessage = Validator.capitalizeFirstLetter(message);
 		String formattedMessage = String.format("<%s>: %s", client.getNickname(),
 				capitalizedMessage);
-		getServerDispatcher().dispatchQuery(new Query(QueryTypes.SentMessage, formattedMessage));
+		getServerManager().dispatchQueryToAll(new Query(QueryTypes.SentMessage, formattedMessage));
 	}
 
 }

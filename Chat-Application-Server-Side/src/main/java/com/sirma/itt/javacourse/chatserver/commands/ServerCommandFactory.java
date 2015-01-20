@@ -1,13 +1,11 @@
 package com.sirma.itt.javacourse.chatserver.commands;
 
-import com.sirma.itt.javacourse.chatcommon.utils.Query;
-import com.sirma.itt.javacourse.chatserver.server.ServerDispatcher;
+import com.sirma.itt.javacourse.chatcommon.models.Query;
+import com.sirma.itt.javacourse.chatserver.server.ServerManager;
+import com.sirma.itt.javacourse.chatserver.server.SocketsManager;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
- * Factory for creating {@link ServerCommand}s. These commands are handled by the server and sent
- * from the clients.
- * 
  * @author Sinan
  */
 public final class ServerCommandFactory {
@@ -19,36 +17,25 @@ public final class ServerCommandFactory {
 
 	}
 
-	/**
-	 * Creates a {@link ServerCommand} with given {@link ServerDispatcher} and {@link Query}.
-	 * 
-	 * @param serverDispatcher
-	 *            - the server dispatcher
-	 * @param view
-	 *            - the view of the server
-	 * @param query
-	 *            - the client's query
-	 * @return - server command depending on the query type
-	 */
-	public static ServerCommand createCommand(ServerDispatcher serverDispatcher, View view,
-			Query query) {
+	public static ServerCommand createCommand(ServerManager serverManager,
+			SocketsManager socketsManager, View view, Query query) {
 		ServerCommand command = null;
 
 		switch (query.getQueryType()) {
 			case Login:
-				command = new LoginCommand(serverDispatcher, view, query);
+				command = new LoginCommand(serverManager, socketsManager, view, query);
 				break;
 
 			case Logout:
-				command = new LogoutCommand(serverDispatcher, view);
+				command = new LogoutCommand(serverManager, socketsManager, view);
 				break;
 
 			case SendMessage:
-				command = new SendMessageCommand(serverDispatcher, view, query);
+				command = new SendMessageCommand(serverManager, socketsManager, view, query);
 				break;
 
 			default:
-				throw new IllegalArgumentException("Not supported command");
+				throw new IllegalArgumentException("Not supported command: " + query.getQueryType());
 		}
 
 		return command;
