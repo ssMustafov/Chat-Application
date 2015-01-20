@@ -54,7 +54,7 @@ public class ClientView implements View, ActionListener, KeyListener {
 	 * Creates a new user interface for the server.
 	 */
 	public ClientView(Client client) {
-		frame.setTitle(bundle.getString("title") + " - ");
+		frame.setTitle(bundle.getString("title") + " - " + client.getNickname());
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

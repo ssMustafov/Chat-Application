@@ -31,7 +31,7 @@ public class Client {
 	 */
 	public void startThread() {
 		thread = new ClientThread(queryHandler, view);
-		new Thread(thread).start();
+		thread.start();
 	}
 
 	/**
@@ -68,5 +68,6 @@ public class Client {
 	 */
 	public void logout() {
 		queryHandler.sendQuery(new Query(QueryTypes.Logout, nickname));
+		thread.stop();
 	}
 }

@@ -36,11 +36,11 @@ public class MementoCaretaker {
 	}
 
 	/**
-	 * Returns the previous memento from the list.
+	 * Returns the next memento from the list.
 	 * 
-	 * @return - the previous memento from the list
+	 * @return - the next memento from the list
 	 */
-	public MessageMemento getPreviousMemento() {
+	public MessageMemento getNextMemento() {
 		MessageMemento memento = null;
 		index++;
 		if (index >= savedMementos.size()) {
@@ -53,11 +53,11 @@ public class MementoCaretaker {
 	}
 
 	/**
-	 * Returns the next memento from the list.
+	 * Returns the previous memento from the list.
 	 * 
-	 * @return - the next memento from the list
+	 * @return - the previous memento from the list
 	 */
-	public MessageMemento getNextMemento() {
+	public MessageMemento getPreviousMemento() {
 		MessageMemento memento = null;
 
 		if ((savedMementos.size() - index) >= savedMementos.size() - 1) {

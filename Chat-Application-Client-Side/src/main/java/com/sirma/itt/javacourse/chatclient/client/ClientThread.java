@@ -16,6 +16,7 @@ public class ClientThread implements Runnable {
 
 	private QueryHandler queryHandler;
 	private View view;
+	private boolean isRunning = false;
 
 	/**
 	 * Creates a new client thread with given query handler and view of the client.
@@ -38,6 +39,9 @@ public class ClientThread implements Runnable {
 		Query query = null;
 		try {
 			while ((query = queryHandler.readQuery()) != null) {
+				if (!isRunning) {
+					break;
+				}
 				if (query.getQueryType() != QueryTypes.Alive) {
 					handleServerQuery(query);
 				}
@@ -47,6 +51,21 @@ public class ClientThread implements Runnable {
 		}
 
 		queryHandler.closeStreams();
+	}
+
+	/**
+	 * Starts this thread.
+	 */
+	public void start() {
+		isRunning = true;
+		new Thread(this).start();
+	}
+
+	/**
+	 * Stops this thread.
+	 */
+	public void stop() {
+		isRunning = false;
 	}
 
 	/**
