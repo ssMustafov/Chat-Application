@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
@@ -55,9 +57,6 @@ public class ClientView implements View, ActionListener {
 
 	/**
 	 * Creates a new user interface for the client.
-	 * 
-	 * @param client
-	 *            - the client
 	 */
 	public ClientView(Client client) {
 		frame.setTitle(bundle.getString("title") + " - " + client.getNickname());
@@ -68,6 +67,7 @@ public class ClientView implements View, ActionListener {
 		createTextAreas();
 		createLists();
 		createFields();
+		setOnWindowClosing();
 
 		JScrollPane consoleScrollPane = new JScrollPane();
 		consoleScrollPane.setViewportView(chatMessagesArea);
@@ -93,6 +93,7 @@ public class ClientView implements View, ActionListener {
 		frame.add(bottomPanel, BorderLayout.PAGE_END);
 
 		frame.setVisible(true);
+
 		this.client = client;
 	}
 
@@ -216,6 +217,22 @@ public class ClientView implements View, ActionListener {
 
 		onlineClientsList = new JList<String>(onlineClientsListModel);
 		onlineClientsList.setFixedCellWidth(ONLINE_CLIENTS_LIST_WIDTH);
+	}
+
+	/**
+	 * Sets to logout the client on closing the window.
+	 */
+	private void setOnWindowClosing() {
+		frame.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (client != null) {
+					client.logout();
+				}
+				super.windowClosing(e);
+			}
+		});
 	}
 
 	/**

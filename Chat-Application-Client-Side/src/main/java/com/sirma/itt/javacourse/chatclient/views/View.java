@@ -1,5 +1,6 @@
 package com.sirma.itt.javacourse.chatclient.views;
 
+
 /**
  * @author Sinan
  */
@@ -59,4 +60,5 @@ public interface View {
 	 * Disposes the view.
 	 */
 	void dispose();
+
 }
