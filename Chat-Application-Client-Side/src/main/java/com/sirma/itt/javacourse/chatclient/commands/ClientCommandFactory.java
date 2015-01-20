@@ -35,12 +35,11 @@ public final class ClientCommandFactory {
 				command = new LoggedIn(view, query);
 				break;
 
-			case LoggedOut:
-				command = new LoggedOutCommand(view);
-				break;
-
 			case ClientsNicknames:
 				command = new ClientsNicknames(view, query);
+				break;
+
+			case LoggedOut:
 				break;
 
 			case SentMessage:

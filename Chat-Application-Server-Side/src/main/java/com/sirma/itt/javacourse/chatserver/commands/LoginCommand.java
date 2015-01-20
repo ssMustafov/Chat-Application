@@ -55,21 +55,19 @@ public class LoginCommand extends ServerCommand {
 		String nickname = query.getMessage();
 
 		if (getServerManager().containsClient(nickname)) {
-			handler.sendQuery(new Query(QueryTypes.Refused, "That nickname is already in use"));
+			handler.sendQuery(new Query(QueryTypes.Refused, "takenNickname"));
 			return;
 		}
 		if (nickname.isEmpty()) {
-			handler.sendQuery(new Query(QueryTypes.Refused, "Nickname is empty"));
+			handler.sendQuery(new Query(QueryTypes.Refused, "emptyNickname"));
 			return;
 		}
 		if (nickname.length() > Validator.MAX_NICKNAME_LENGHT) {
-			handler.sendQuery(new Query(QueryTypes.Refused,
-					"The maximum length of the nickname is " + Validator.MAX_NICKNAME_LENGHT));
+			handler.sendQuery(new Query(QueryTypes.Refused, "maxAllowedNicknameLength"));
 			return;
 		}
 		if (!Validator.isValidNickname(nickname)) {
-			handler.sendQuery(new Query(QueryTypes.Refused,
-					"The nickname contains forbidden symbols. Can consist of letters, numbers, dash and underscore"));
+			handler.sendQuery(new Query(QueryTypes.Refused, "invalidNickname"));
 			return;
 		}
 
@@ -87,7 +85,8 @@ public class LoginCommand extends ServerCommand {
 				bundle.getString(LanguageConstants.THREAD_STARTED_MESSAGE) + nickname);
 
 		String onlineClientsNicknames = getServerManager().getOnlineClientsNicknames();
-		handler.sendQuery(new Query(QueryTypes.LoggedIn, "Welcome, " + nickname));
+		handler.sendQuery(new Query(QueryTypes.LoggedIn, nickname));
+		handler.sendQuery(new Query(QueryTypes.LoggedIn, "welcome"));
 		handler.sendQuery(new Query(QueryTypes.ClientsNicknames, onlineClientsNicknames));
 	}
 
@@ -99,7 +98,7 @@ public class LoginCommand extends ServerCommand {
 	 */
 	private void sleep(int time) {
 		try {
-			Thread.sleep(100);
+			Thread.sleep(time);
 		} catch (InterruptedException e) {
 			LOGGER.error(e.getMessage(), e);
 		}

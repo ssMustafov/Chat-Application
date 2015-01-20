@@ -87,8 +87,8 @@ public class Login implements Runnable {
 					Client client = new Client(queryHandler, nickname);
 					client.startThread();
 				} else {
-					form.showNoticeDialog(answer.getMessage());
-					LOGGER.debug(answer.toString());
+					String errorMessage = bundle.getString(answer.getMessage());
+					form.showNoticeDialog(errorMessage);
 					LOGGER.info("Not started server");
 				}
 			} catch (IOException e) {
