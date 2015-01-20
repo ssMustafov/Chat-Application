@@ -2,12 +2,12 @@ package com.sirma.itt.javacourse.chatserver.commands;
 
 import java.util.ResourceBundle;
 
-import com.sirma.itt.javacourse.chatcommon.models.Client;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerLanguageConstants;
+import com.sirma.itt.javacourse.chatserver.server.Client;
 import com.sirma.itt.javacourse.chatserver.server.ServerManager;
 import com.sirma.itt.javacourse.chatserver.server.SocketsManager;
 import com.sirma.itt.javacourse.chatserver.views.View;
@@ -35,6 +35,7 @@ public class LogoutCommand extends ServerCommand {
 		}
 
 		getServerManager().removeClient(client);
+		getSocketsManager().remove(client.getId());
 		handler.sendQuery(new Query(QueryTypes.LoggedOut, "You have logged out"));
 
 		String clientDisconnectedMessage = String.format("@%s %s", client.getNickname(),

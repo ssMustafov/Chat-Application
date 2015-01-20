@@ -8,7 +8,6 @@ import java.util.Queue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.sirma.itt.javacourse.chatcommon.models.Client;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 
 /**

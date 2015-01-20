@@ -1,6 +1,8 @@
 package com.sirma.itt.javacourse.chatserver.views;
 
 /**
+ * Defines user interface contract for the server.
+ * 
  * @author Sinan
  */
 public interface View {

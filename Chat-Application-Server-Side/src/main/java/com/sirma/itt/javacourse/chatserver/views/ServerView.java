@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Locale;
-import java.util.Observable;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
@@ -30,7 +29,7 @@ import com.sirma.itt.javacourse.chatcommon.utils.ServerLanguageConstants;
 import com.sirma.itt.javacourse.chatserver.server.Server;
 
 /**
- * Represents the user interface for the server. Extends {@link Observable}.
+ * Represents the user interface for the server.
  * 
  * @author Sinan
  */
@@ -188,20 +187,27 @@ public class ServerView implements View, ActionListener {
 			JComboBox<?> cb = (JComboBox<?>) e.getSource();
 			language = (String) cb.getSelectedItem();
 
-			ResourceBundle.clearCache();
-			if (ServerConfig.AVAILABLE_LANGUAGES[0].equals(language)) {
-				LanguageBundleSingleton.setServerLocale(Locale.US);
-				bundle = LanguageBundleSingleton.getServerBundleInstance();
-			} else {
-				LanguageBundleSingleton.setServerLocale(new Locale("bg", "BG"));
-				bundle = LanguageBundleSingleton.getServerBundleInstance();
-			}
-			onLocaleChange();
+			changeLanguage();
 		} else {
 			JComboBox<?> cb = (JComboBox<?>) e.getSource();
 			String stringPort = (String) cb.getSelectedItem();
 			port = Integer.parseInt(stringPort);
 		}
+	}
+
+	/**
+	 * Changes the language of the server ui.
+	 */
+	private void changeLanguage() {
+		ResourceBundle.clearCache();
+		if (ServerConfig.AVAILABLE_LANGUAGES[0].equals(language)) {
+			LanguageBundleSingleton.setServerLocale(Locale.US);
+			bundle = LanguageBundleSingleton.getServerBundleInstance();
+		} else {
+			LanguageBundleSingleton.setServerLocale(new Locale("bg", "BG"));
+			bundle = LanguageBundleSingleton.getServerBundleInstance();
+		}
+		onLocaleChange();
 	}
 
 	/**
@@ -236,10 +242,6 @@ public class ServerView implements View, ActionListener {
 		portList.setActionCommand(PORT_LIST_ACTION_COMMAND);
 		portList.setSelectedIndex(0);
 		portList.addActionListener(this);
-	}
-
-	public static void main(String[] args) {
-		new ServerView();
 	}
 
 	/**

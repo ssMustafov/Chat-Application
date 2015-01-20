@@ -2,7 +2,6 @@ package com.sirma.itt.javacourse.chatserver.server;
 
 import java.util.List;
 
-import com.sirma.itt.javacourse.chatcommon.models.Client;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 
 /**

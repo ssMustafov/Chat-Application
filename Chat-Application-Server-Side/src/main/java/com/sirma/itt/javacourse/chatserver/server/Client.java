@@ -1,4 +1,4 @@
-package com.sirma.itt.javacourse.chatcommon.models;
+package com.sirma.itt.javacourse.chatserver.server;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

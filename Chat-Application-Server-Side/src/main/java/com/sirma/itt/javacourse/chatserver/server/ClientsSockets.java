@@ -21,8 +21,17 @@ public class ClientsSockets implements SocketsManager {
 		clients.put(id, queryHandler);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void remove(int id) {
+		clients.remove(id);
+	}
+
 	@Override
 	public void clear() {
 		clients.clear();
 	}
+
 }

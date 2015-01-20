@@ -3,7 +3,6 @@ package com.sirma.itt.javacourse.chatserver.server;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
-import com.sirma.itt.javacourse.chatcommon.models.Client;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;

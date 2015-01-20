@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.sirma.itt.javacourse.chatcommon.models.Client;
-
 /**
  * @author Sinan
  */
