@@ -9,6 +9,8 @@ import org.mockito.Mockito;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
+ * Tests the {@link Server} class.
+ * 
  * @author Sinan
  */
 public class ServerTest {
@@ -25,6 +27,9 @@ public class ServerTest {
 		server = new Server(view, 7000);
 	}
 
+	/**
+	 * Tests {@link Server#startServer()} to check if its returning the right value.
+	 */
 	@Test
 	public void testStartServer() {
 		boolean isServerStarted = server.startServer();
@@ -32,6 +37,9 @@ public class ServerTest {
 		server.stopServer();
 	}
 
+	/**
+	 * Tests {@link Server#stopServer()} to check if its returning the right value.
+	 */
 	@Test
 	public void testStopServer() {
 		server.startServer();

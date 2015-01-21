@@ -4,8 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,10 +15,13 @@ import org.mockito.Mockito;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
+ * Tests the server by connecting alot of clients to it.
+ * 
  * @author Sinan
  */
 public class LoadTest {
 
+	private static final Logger LOGGER = LogManager.getLogger(LoadTest.class);
 	private final int numberOfClients = 500;
 	private final String host = "localhost";
 	private final int testPort = 7000;
@@ -25,20 +29,20 @@ public class LoadTest {
 	private View view;
 
 	/**
-	 * @throws java.lang.Exception
+	 * 
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		view = Mockito.mock(View.class);
 		server = new Server(view, testPort);
 		server.startServer();
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 *
 	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		server.stopServer();
 	}
 
@@ -51,8 +55,8 @@ public class LoadTest {
 			for (int i = 1; i <= numberOfClients; i++) {
 				new Socket(host, testPort);
 			}
-		} catch (UnknownHostException e) {
 		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		assertTrue(true);

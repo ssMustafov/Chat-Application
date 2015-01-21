@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
+ * Tests {@link ClientsManager} class.
+ * 
  * @author Sinan
  */
 public class ClientsManagerTest {

@@ -15,9 +15,12 @@ import org.mockito.Mockito;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
+ * Tests server's functionality.
+ * 
  * @author Sinan
  */
 public class FunctionalTests {
@@ -28,29 +31,35 @@ public class FunctionalTests {
 	private Server server;
 	private View view;
 
+	/**
+	 * Sleeps for given time.
+	 * 
+	 * @param time
+	 *            - the time to sleep
+	 */
 	private void sleep(int time) {
 		try {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * 
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		view = Mockito.mock(View.class);
 		server = new Server(view, port);
 		server.startServer();
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * 
 	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		server.stopServer();
 	}
 
@@ -64,9 +73,10 @@ public class FunctionalTests {
 			QueryHandler clientHandler = new QueryHandler(socket);
 			clientHandler.sendQuery(new Query(QueryTypes.Login, "test"));
 
-			Query expectedWelcomeQuery = new Query(QueryTypes.LoggedIn, "Welcome, test");
+			Query expectedWelcomeQuery = new Query(QueryTypes.LoggedIn, "test");
 			Query expectedNicknamesQuery = new Query(QueryTypes.ClientsNicknames, "test");
 			assertEquals(expectedWelcomeQuery.toString(), clientHandler.readQuery().toString());
+			clientHandler.readQuery();
 			assertEquals(expectedNicknamesQuery.toString(), clientHandler.readQuery().toString());
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
@@ -144,6 +154,9 @@ public class FunctionalTests {
 		}
 	}
 
+	/**
+	 * Tests logout after logging in.
+	 */
 	@Test
 	public void testLogoutAfterLogin() {
 		try {
@@ -153,14 +166,19 @@ public class FunctionalTests {
 			clientHandler.sendQuery(new Query(QueryTypes.Logout, "test"));
 			clientHandler.readQuery();
 			clientHandler.readQuery();
+			clientHandler.readQuery();
 
-			Query expectedLogoutQuery = new Query(QueryTypes.LoggedOut, "You have logged out");
+			Query expectedLogoutQuery = new Query(QueryTypes.LoggedOut,
+					LanguageConstants.CLIENT_LOGOUT_MESSAGE);
 			assertEquals(expectedLogoutQuery.toString(), clientHandler.readQuery().toString());
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
+	/**
+	 * Tests logout without login.
+	 */
 	@Test
 	public void testLogoutWithoutLogin() {
 		try {
@@ -168,13 +186,17 @@ public class FunctionalTests {
 			QueryHandler clientHandler = new QueryHandler(socket);
 			clientHandler.sendQuery(new Query(QueryTypes.Logout, "test"));
 
-			Query expectedLogoutQuery = new Query(QueryTypes.Refused, "You are not logged in");
+			Query expectedLogoutQuery = new Query(QueryTypes.Refused,
+					LanguageConstants.CLIENT_NOT_LOGGED_IN_MESSAGE);
 			assertEquals(expectedLogoutQuery.toString(), clientHandler.readQuery().toString());
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
+	/**
+	 * Tests to send a message with two clients.
+	 */
 	@Test
 	public void testSendMessageWithTwoClients() {
 		try {
@@ -184,9 +206,11 @@ public class FunctionalTests {
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "pesho"));
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
+			clientHandler1.readQuery();
 
 			QueryHandler clientHandler2 = new QueryHandler(socket2);
 			clientHandler2.sendQuery(new Query(QueryTypes.Login, "gosho"));
+			clientHandler2.readQuery();
 			clientHandler2.readQuery();
 			clientHandler2.readQuery();
 
@@ -201,6 +225,9 @@ public class FunctionalTests {
 		}
 	}
 
+	/**
+	 * Tests notification when a client is connected. Tests with two connected clients.
+	 */
 	@Test
 	public void testClientConnectedNotificationWithTwoClients() {
 		try {
@@ -208,6 +235,7 @@ public class FunctionalTests {
 			Socket socket2 = new Socket(host, port);
 			QueryHandler clientHandler1 = new QueryHandler(socket1);
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "pesho"));
+			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 
@@ -223,6 +251,9 @@ public class FunctionalTests {
 		}
 	}
 
+	/**
+	 * Tests client disconnected notification with two clients.
+	 */
 	@Test
 	public void testClientDisconnectedNotificationWithTwoClients() {
 		try {
@@ -237,6 +268,7 @@ public class FunctionalTests {
 			clientHandler2.sendQuery(new Query(QueryTypes.Login, "gosho"));
 			clientHandler2.readQuery();
 			clientHandler2.readQuery();
+			clientHandler2.readQuery();
 
 			clientHandler1.sendQuery(new Query(QueryTypes.Logout, "pesho"));
 
@@ -247,6 +279,9 @@ public class FunctionalTests {
 		}
 	}
 
+	/**
+	 * Tests notification when a client is connected. Tests with three connected clients.
+	 */
 	@Test
 	public void testClientConnectedNotificationWithThreeClients() {
 		try {
@@ -257,14 +292,17 @@ public class FunctionalTests {
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "pesho"));
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
+			clientHandler1.readQuery();
 
 			QueryHandler clientHandler2 = new QueryHandler(socket2);
 			clientHandler2.sendQuery(new Query(QueryTypes.Login, "gosho"));
 			clientHandler2.readQuery();
 			clientHandler2.readQuery();
+			clientHandler2.readQuery();
 
 			QueryHandler clientHandler3 = new QueryHandler(socket3);
 			clientHandler3.sendQuery(new Query(QueryTypes.Login, "test-client"));
+			clientHandler3.readQuery();
 			clientHandler3.readQuery();
 			clientHandler3.readQuery();
 
