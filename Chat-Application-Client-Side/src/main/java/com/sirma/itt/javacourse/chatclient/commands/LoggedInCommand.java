@@ -11,7 +11,7 @@ import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
  * 
  * @author Sinan
  */
-public class LoggedIn extends ClientCommand {
+public class LoggedInCommand extends ClientCommand {
 
 	private ResourceBundle bundle = LanguageBundleSingleton.getClientBundleInstance();
 	private Query query;
@@ -25,7 +25,7 @@ public class LoggedIn extends ClientCommand {
 	 * @param query
 	 *            - the query sent from the server
 	 */
-	public LoggedIn(View view, Query query) {
+	public LoggedInCommand(View view, Query query) {
 		super(view);
 		this.query = query;
 	}

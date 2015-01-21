@@ -32,7 +32,7 @@ public final class ClientCommandFactory {
 		switch (query.getQueryType()) {
 
 			case LoggedIn:
-				command = new LoggedIn(view, query);
+				command = new LoggedInCommand(view, query);
 				break;
 
 			case ClientsNicknames:
