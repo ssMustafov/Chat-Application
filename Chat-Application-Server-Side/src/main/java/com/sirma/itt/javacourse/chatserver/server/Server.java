@@ -98,11 +98,11 @@ public class Server implements Runnable {
 			serverSocket = new ServerSocket(port);
 			isRunning = true;
 		} catch (BindException e) {
-			view.showErrorDialog(bundle.getString(LanguageConstants.ANOTHER_PORT_MESSAGE));
+			view.showErrorDialog(bundle.getString(LanguageConstants.SERVER_ANOTHER_PORT_MESSAGE));
 			view.resetUI();
 			LOGGER.error("Port is busy: " + port, e);
 		} catch (IOException e) {
-			view.showErrorDialog(bundle.getString(LanguageConstants.CANNOT_START_MESSAGE));
+			view.showErrorDialog(bundle.getString(LanguageConstants.SERVER_CANNOT_START_MESSAGE));
 			LOGGER.error(e.getMessage(), e);
 		}
 		new Thread(this).start();
@@ -118,7 +118,8 @@ public class Server implements Runnable {
 	 */
 	public boolean stopServer() {
 		try {
-			serverManager.dispatchQueryToAll(new Query(QueryTypes.Closed, "The server is closed"));
+			serverManager.dispatchQueryToAll(new Query(QueryTypes.Closed,
+					LanguageConstants.SERVER_CLOSED_MESSAGE));
 			serverSocket.close();
 			serverManager.clear();
 			socketsManager.clear();

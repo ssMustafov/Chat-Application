@@ -3,6 +3,7 @@ package com.sirma.itt.javacourse.chatserver.commands;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
 import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 import com.sirma.itt.javacourse.chatserver.server.Client;
 import com.sirma.itt.javacourse.chatserver.server.ServerManager;
@@ -44,7 +45,8 @@ public class SendMessageCommand extends ServerCommand {
 	public void execute(Client client) {
 		QueryHandler handler = getSocketsManager().getHandler(client.getId());
 		if (!getServerManager().containsClient(client.getNickname())) {
-			handler.sendQuery(new Query(QueryTypes.Refused, "You're not logged in"));
+			handler.sendQuery(new Query(QueryTypes.Refused,
+					LanguageConstants.CLIENT_NOT_LOGGED_IN_MESSAGE));
 			return;
 		}
 

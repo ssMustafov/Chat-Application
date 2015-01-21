@@ -55,19 +55,23 @@ public class LoginCommand extends ServerCommand {
 		String nickname = query.getMessage();
 
 		if (getServerManager().containsClient(nickname)) {
-			handler.sendQuery(new Query(QueryTypes.Refused, "takenNickname"));
+			handler.sendQuery(new Query(QueryTypes.Refused,
+					LanguageConstants.LOGIN_TAKEN_NICKNAME_MESSAGE));
 			return;
 		}
 		if (nickname.isEmpty()) {
-			handler.sendQuery(new Query(QueryTypes.Refused, "emptyNickname"));
+			handler.sendQuery(new Query(QueryTypes.Refused,
+					LanguageConstants.LOGIN_EMPTY_NICKNAME_MESSAGE));
 			return;
 		}
 		if (nickname.length() > Validator.MAX_NICKNAME_LENGHT) {
-			handler.sendQuery(new Query(QueryTypes.Refused, "maxAllowedNicknameLength"));
+			handler.sendQuery(new Query(QueryTypes.Refused,
+					LanguageConstants.LOGIN_MAX_ALLOWED_NICKNAME_LENGTH_MESSAGE));
 			return;
 		}
 		if (!Validator.isValidNickname(nickname)) {
-			handler.sendQuery(new Query(QueryTypes.Refused, "invalidNickname"));
+			handler.sendQuery(new Query(QueryTypes.Refused,
+					LanguageConstants.LOGIN_INVALID_NICKNAME_MESSAGE));
 			return;
 		}
 
@@ -80,13 +84,13 @@ public class LoginCommand extends ServerCommand {
 
 		getView().addOnlineClient(nickname);
 		getView().appendMessageToConsole(
-				bundle.getString(LanguageConstants.CLIENT_CONNECTED_MESSAGE) + nickname);
+				bundle.getString(LanguageConstants.SERVER_CLIENT_CONNECTED_MESSAGE) + nickname);
 		getView().appendMessageToConsole(
-				bundle.getString(LanguageConstants.THREAD_STARTED_MESSAGE) + nickname);
+				bundle.getString(LanguageConstants.SERVER_THREAD_STARTED_MESSAGE) + nickname);
 
 		String onlineClientsNicknames = getServerManager().getOnlineClientsNicknames();
 		handler.sendQuery(new Query(QueryTypes.LoggedIn, nickname));
-		handler.sendQuery(new Query(QueryTypes.LoggedIn, "welcome"));
+		handler.sendQuery(new Query(QueryTypes.LoggedIn, LanguageConstants.CLIENT_WELCOME_MESSAGE));
 		handler.sendQuery(new Query(QueryTypes.ClientsNicknames, onlineClientsNicknames));
 	}
 

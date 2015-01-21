@@ -12,6 +12,7 @@ import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
 import com.sirma.itt.javacourse.chatserver.commands.ServerCommand;
 import com.sirma.itt.javacourse.chatserver.commands.ServerCommandFactory;
 import com.sirma.itt.javacourse.chatserver.views.View;
@@ -80,7 +81,7 @@ public class ClientThread implements Runnable {
 		} catch (SocketException e) {
 			clearClient();
 			String formattedMessage = String.format("@%s%s", client.getNickname(),
-					bundle.getString("clientCrashed"));
+					bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
 			view.appendMessageToConsole(formattedMessage);
 			view.removeOnlineClient(client.getNickname());
 			serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client

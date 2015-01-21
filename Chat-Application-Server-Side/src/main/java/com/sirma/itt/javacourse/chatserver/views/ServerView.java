@@ -63,7 +63,7 @@ public class ServerView implements View, ActionListener {
 	 * Creates a new user interface for the server.
 	 */
 	public ServerView() {
-		frame.setTitle(bundle.getString(LanguageConstants.TITLE_MESSAGE));
+		frame.setTitle(bundle.getString(LanguageConstants.SERVER_TITLE_MESSAGE));
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -78,7 +78,7 @@ public class ServerView implements View, ActionListener {
 		consoleScrollPane.setViewportView(consoleArea);
 
 		TitledBorder consoleBorder = BorderFactory.createTitledBorder(bundle
-				.getString(LanguageConstants.CONSOLE_MESSAGE));
+				.getString(LanguageConstants.SERVER_CONSOLE_MESSAGE));
 		consoleBorder.setTitleJustification(TitledBorder.LEFT);
 		consoleScrollPane.setBorder(consoleBorder);
 
@@ -204,8 +204,8 @@ public class ServerView implements View, ActionListener {
 	 * Initializes the labels.
 	 */
 	private void createLabels() {
-		labelLang = new JLabel(bundle.getString(LanguageConstants.CHOOSE_LANGUAGE_MESSAGE));
-		labelPort = new JLabel(bundle.getString(LanguageConstants.CHOOSE_PORT_MESSAGE));
+		labelLang = new JLabel(bundle.getString(LanguageConstants.SERVER_CHOOSE_LANGUAGE_MESSAGE));
+		labelPort = new JLabel(bundle.getString(LanguageConstants.SERVER_CHOOSE_PORT_MESSAGE));
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class ServerView implements View, ActionListener {
 	 * Creates the buttons.
 	 */
 	private void createButtons() {
-		startButton = new JButton(bundle.getString(LanguageConstants.START_SERVER_MESSAGE));
+		startButton = new JButton(bundle.getString(LanguageConstants.SERVER_START_MESSAGE));
 		startButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -253,7 +253,7 @@ public class ServerView implements View, ActionListener {
 			}
 		});
 
-		stopButton = new JButton(bundle.getString(LanguageConstants.STOP_SERVER_MESSAGE));
+		stopButton = new JButton(bundle.getString(LanguageConstants.SERVER_STOP_MESSAGE));
 		stopButton.setEnabled(false);
 		stopButton.addActionListener(new ActionListener() {
 
@@ -303,7 +303,7 @@ public class ServerView implements View, ActionListener {
 	 */
 	private void onLocaleChange() {
 		TitledBorder consoleBorder = BorderFactory.createTitledBorder(bundle
-				.getString(LanguageConstants.CONSOLE_MESSAGE));
+				.getString(LanguageConstants.SERVER_CONSOLE_MESSAGE));
 		consoleBorder.setTitleJustification(TitledBorder.LEFT);
 		consoleScrollPane.setBorder(consoleBorder);
 
@@ -312,11 +312,11 @@ public class ServerView implements View, ActionListener {
 		onlineClientsBorder.setTitleJustification(TitledBorder.CENTER);
 		listScrollPane.setBorder(onlineClientsBorder);
 
-		frame.setTitle(bundle.getString(LanguageConstants.TITLE_MESSAGE));
-		startButton.setText(bundle.getString(LanguageConstants.START_SERVER_MESSAGE));
-		stopButton.setText(bundle.getString(LanguageConstants.STOP_SERVER_MESSAGE));
-		labelLang.setText(bundle.getString(LanguageConstants.CHOOSE_LANGUAGE_MESSAGE));
-		labelPort.setText(bundle.getString(LanguageConstants.CHOOSE_PORT_MESSAGE));
+		frame.setTitle(bundle.getString(LanguageConstants.SERVER_TITLE_MESSAGE));
+		startButton.setText(bundle.getString(LanguageConstants.SERVER_START_MESSAGE));
+		stopButton.setText(bundle.getString(LanguageConstants.SERVER_STOP_MESSAGE));
+		labelLang.setText(bundle.getString(LanguageConstants.SERVER_CHOOSE_LANGUAGE_MESSAGE));
+		labelPort.setText(bundle.getString(LanguageConstants.SERVER_CHOOSE_PORT_MESSAGE));
 	}
 
 }

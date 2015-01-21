@@ -1,7 +1,11 @@
 package com.sirma.itt.javacourse.chatclient.commands;
 
+import java.util.ResourceBundle;
+
 import com.sirma.itt.javacourse.chatclient.views.View;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
 
 /**
  * Handles the ClientDisconnectedCommand query from the server. Sent from the server when a new
@@ -11,6 +15,7 @@ import com.sirma.itt.javacourse.chatcommon.models.Query;
  */
 public class ClientDisconnectedCommand extends ClientCommand {
 
+	private ResourceBundle bundle = LanguageBundleSingleton.getClientBundleInstance();
 	private Query query;
 
 	/**
@@ -34,7 +39,9 @@ public class ClientDisconnectedCommand extends ClientCommand {
 	public void execute() {
 		String nickname = query.getMessage();
 		getClientView().removeOnlineClient(nickname);
-		getClientView().appendMessageToChatArea("@" + query.getMessage() + " left");
+		getClientView().appendMessageToChatArea(
+				"@" + query.getMessage() + " "
+						+ bundle.getString(LanguageConstants.CLIENT_LEFT_MESSAGE));
 	}
 
 }

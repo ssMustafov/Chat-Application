@@ -14,6 +14,8 @@ import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
+import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 
 /**
  * Represents the {@link LoginForm}'s logic. It searches for the server's port and tries to login.
@@ -72,7 +74,7 @@ public class Login implements Runnable {
 	public void run() {
 		setSocket();
 		if (socket == null) {
-			form.showErrorDialog(bundle.getString("noServer"));
+			form.showErrorDialog(bundle.getString(LanguageConstants.LOGIN_NO_SERVER_MESSAGE));
 		} else {
 			queryHandler = new QueryHandler(socket);
 
@@ -87,9 +89,15 @@ public class Login implements Runnable {
 					Client client = new Client(queryHandler, nickname);
 					client.startThread();
 				} else {
-					String errorMessage = bundle.getString(answer.getMessage());
+					String bundleKey = answer.getMessage();
+					String errorMessage = "";
+					if (LanguageConstants.LOGIN_MAX_ALLOWED_NICKNAME_LENGTH_MESSAGE
+							.equals(bundleKey)) {
+						errorMessage = bundle.getString(bundleKey) + Validator.MAX_NICKNAME_LENGHT;
+					} else {
+						errorMessage = bundle.getString(bundleKey);
+					}
 					form.showNoticeDialog(errorMessage);
-					LOGGER.info("Not started server");
 				}
 			} catch (IOException e) {
 				LOGGER.error(e.getMessage(), e);

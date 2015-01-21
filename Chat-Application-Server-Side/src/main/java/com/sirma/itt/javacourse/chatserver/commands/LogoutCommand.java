@@ -43,16 +43,17 @@ public class LogoutCommand extends ServerCommand {
 	public void execute(Client client) {
 		QueryHandler handler = getSocketsManager().getHandler(client.getId());
 		if (!getServerManager().containsClient(client.getNickname())) {
-			handler.sendQuery(new Query(QueryTypes.Refused, "You are not logged in"));
+			handler.sendQuery(new Query(QueryTypes.Refused,
+					LanguageConstants.CLIENT_NOT_LOGGED_IN_MESSAGE));
 			return;
 		}
 
 		getServerManager().removeClient(client);
 		getSocketsManager().remove(client.getId());
-		handler.sendQuery(new Query(QueryTypes.LoggedOut, "You have logged out"));
+		handler.sendQuery(new Query(QueryTypes.LoggedOut, LanguageConstants.CLIENT_LOGOUT_MESSAGE));
 
 		String clientDisconnectedMessage = String.format("@%s %s", client.getNickname(),
-				bundle.getString(LanguageConstants.CLIENT_DISCONNECTED_MESSAGE));
+				bundle.getString(LanguageConstants.SERVER_CLIENT_DISCONNECTED_MESSAGE));
 		getView().appendMessageToConsole(clientDisconnectedMessage);
 		getView().removeOnlineClient(client.getNickname());
 
