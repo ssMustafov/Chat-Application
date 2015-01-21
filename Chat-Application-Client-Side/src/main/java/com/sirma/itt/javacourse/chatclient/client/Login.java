@@ -98,6 +98,7 @@ public class Login implements Runnable {
 						errorMessage = bundle.getString(bundleKey);
 					}
 					form.showNoticeDialog(errorMessage);
+					socket.close();
 				}
 			} catch (IOException e) {
 				LOGGER.error(e.getMessage(), e);

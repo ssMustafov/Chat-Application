@@ -80,7 +80,7 @@ public class ClientThread implements Runnable {
 			}
 		} catch (SocketException e) {
 			clearClient();
-			String formattedMessage = String.format("@%s%s", client.getNickname(),
+			String formattedMessage = String.format("@%s %s", client.getNickname(),
 					bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
 			view.appendMessageToConsole(formattedMessage);
 			view.removeOnlineClient(client.getNickname());
