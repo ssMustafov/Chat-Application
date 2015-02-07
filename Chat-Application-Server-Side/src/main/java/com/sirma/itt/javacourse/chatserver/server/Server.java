@@ -6,8 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +15,6 @@ import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
-import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
@@ -39,8 +36,6 @@ public class Server implements Runnable {
 	private View view;
 	private int port;
 	private boolean isRunning = false;
-	private ExecutorService threadPool = Executors
-			.newFixedThreadPool(ServerConfig.THREAD_POOL_MAX_SIZE);
 
 	/**
 	 * Creates a new chat server with given {@link View} and port.
@@ -134,7 +129,6 @@ public class Server implements Runnable {
 		}
 		view.appendMessageToConsole(bundle.getString(LanguageConstants.SERVER_CLOSED_MESSAGE));
 		view.clearOnlineClientsList();
-		threadPool.shutdown();
 		LOGGER.info("Closed the server");
 		return true;
 	}
@@ -159,7 +153,7 @@ public class Server implements Runnable {
 				socketsManager.add(client.getId(), new QueryHandler(socket));
 				ClientThread clientThread = new ClientThread(serverManager, socketsManager, view,
 						client);
-				threadPool.execute(clientThread);
+				clientThread.start();
 			}
 		} catch (SocketException e) {
 			LOGGER.info("Server stopped accepting clients");
