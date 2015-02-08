@@ -1,6 +1,7 @@
 package com.sirma.itt.javacourse.chatserver.server;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -12,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
@@ -22,7 +24,7 @@ import com.sirma.itt.javacourse.chatserver.views.View;
 public class LoadTest {
 
 	private static final Logger LOGGER = LogManager.getLogger(LoadTest.class);
-	private final int numberOfClients = 500;
+	private final int numberOfClients = ServerConfig.THREAD_POOL_MAX_SIZE;
 	private final String host = "localhost";
 	private final int testPort = 7000;
 	private Server server;
@@ -57,6 +59,7 @@ public class LoadTest {
 			}
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
+			fail("Load test failed");
 		}
 
 		assertTrue(true);

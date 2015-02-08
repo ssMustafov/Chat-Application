@@ -17,7 +17,7 @@ public final class ServerConfig {
 	 */
 	public static final int CLIENT_TIMEOUT = 180000;
 
-	public static final int THREAD_POOL_MAX_SIZE = 500;
+	public static final int THREAD_POOL_MAX_SIZE = 20;
 
 	public static final int CLIENT_CHAT_MESSAGE_MAX_LENGTH = 200;
 
