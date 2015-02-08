@@ -58,9 +58,7 @@ public final class LanguageBundleSingleton {
 	 *            - the locale of the bundle
 	 */
 	public static void setServerLocale(Locale locale) {
-		synchronized (serverBundle) {
-			serverBundle = ResourceBundle.getBundle("ServerBundle", locale);
-		}
+		serverBundle = ResourceBundle.getBundle("ServerBundle", locale);
 	}
 
 	/**
@@ -70,9 +68,7 @@ public final class LanguageBundleSingleton {
 	 *            - the locale of the bundle for the client
 	 */
 	public static void setClientLocale(Locale locale) {
-		synchronized (clientBundle) {
-			clientBundle = ResourceBundle.getBundle("ClientBundle", locale);
-		}
+		clientBundle = ResourceBundle.getBundle("ClientBundle", locale);
 	}
 
 	/**
@@ -82,9 +78,7 @@ public final class LanguageBundleSingleton {
 	 *            - the locale of the bundle for the client login form
 	 */
 	public static void setClientLoginLocale(Locale locale) {
-		synchronized (clientLoginBundle) {
-			clientLoginBundle = ResourceBundle.getBundle("ClientLoginBundle", locale);
-		}
+		clientLoginBundle = ResourceBundle.getBundle("ClientLoginBundle", locale);
 	}
 
 }
