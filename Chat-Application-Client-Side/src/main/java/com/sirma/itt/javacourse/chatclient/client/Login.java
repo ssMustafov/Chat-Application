@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.sirma.itt.javacourse.chatclient.utils.ServerFinder;
 import com.sirma.itt.javacourse.chatclient.views.LoginForm;
+import com.sirma.itt.javacourse.chatclient.views.View;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
@@ -77,33 +78,48 @@ public class Login implements Runnable {
 			form.showErrorDialog(bundle.getString(LanguageConstants.LOGIN_NO_SERVER_MESSAGE));
 		} else {
 			queryHandler = new QueryHandler(socket);
-
-			String nickname = form.getNickname();
-			Query loginQuery = new Query(QueryTypes.Login, nickname);
-			queryHandler.sendQuery(loginQuery);
-
 			try {
-				Query answer = queryHandler.readQuery();
-				if (answer.getQueryType() == QueryTypes.LoggedIn) {
-					form.dispose();
-					Client client = new Client(queryHandler, nickname);
-					client.startThread();
+				Query canProceedQuery = queryHandler.readQuery();
+				if (canProceedQuery.getQueryType() == QueryTypes.Success) {
+					proccesLogin();
 				} else {
-					String bundleKey = answer.getMessage();
-					String errorMessage = "";
-					if (LanguageConstants.LOGIN_MAX_ALLOWED_NICKNAME_LENGTH_MESSAGE
-							.equals(bundleKey)) {
-						errorMessage = bundle.getString(bundleKey) + Validator.MAX_NICKNAME_LENGHT;
-					} else {
-						errorMessage = bundle.getString(bundleKey);
-					}
-					form.showNoticeDialog(errorMessage);
+					form.showNoticeDialog(bundle.getString(canProceedQuery.getMessage()));
 					socket.close();
 				}
 			} catch (IOException e) {
-				LOGGER.error(e.getMessage(), e);
+				e.printStackTrace();
 			}
 		}
 	}
 
+	/**
+	 * Procceses login to the server. If server accepts the client's nickname creates new
+	 * {@link View} for the chat and closes the login form.
+	 */
+	private void proccesLogin() {
+		String nickname = form.getNickname();
+		Query loginQuery = new Query(QueryTypes.Login, nickname);
+		queryHandler.sendQuery(loginQuery);
+
+		try {
+			Query answer = queryHandler.readQuery();
+			if (answer.getQueryType() == QueryTypes.LoggedIn) {
+				form.dispose();
+				Client client = new Client(queryHandler, nickname);
+				client.startThread();
+			} else {
+				String bundleKey = answer.getMessage();
+				String errorMessage = "";
+				if (LanguageConstants.LOGIN_MAX_ALLOWED_NICKNAME_LENGTH_MESSAGE.equals(bundleKey)) {
+					errorMessage = bundle.getString(bundleKey) + Validator.MAX_NICKNAME_LENGHT;
+				} else {
+					errorMessage = bundle.getString(bundleKey);
+				}
+				form.showNoticeDialog(errorMessage);
+				socket.close();
+			}
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+	}
 }

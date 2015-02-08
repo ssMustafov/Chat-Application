@@ -38,6 +38,7 @@ public final class LanguageConstants {
 	public static final String LOGIN_MAX_ALLOWED_NICKNAME_LENGTH_MESSAGE = "maxAllowedNicknameLength";
 	public static final String LOGIN_NO_SERVER_MESSAGE = "noServer";
 	public static final String LOGIN_TAKEN_NICKNAME_MESSAGE = "takenNickname";
+	public static final String LOGIN_SERVER_FULL = "serverFull";
 
 	public static final String CLIENT_TITLE_MESSAGE = "title";
 	public static final String CLIENT_SEND_MESSAGE = "send";

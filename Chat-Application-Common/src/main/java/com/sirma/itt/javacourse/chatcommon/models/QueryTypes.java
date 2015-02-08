@@ -10,5 +10,5 @@ public enum QueryTypes {
 	Login, Logout, SendMessage,
 
 	// send by server
-	Refused, Closed, LoggedIn, LoggedOut, ClientsNicknames, ClientConnected, ClientDisconnected, Alive, SentMessage
+	Success, Refused, Closed, LoggedIn, LoggedOut, ClientsNicknames, ClientConnected, ClientDisconnected, Alive, SentMessage
 }

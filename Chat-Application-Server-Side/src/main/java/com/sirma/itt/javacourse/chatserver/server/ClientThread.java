@@ -1,6 +1,7 @@
 package com.sirma.itt.javacourse.chatserver.server;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ResourceBundle;
 
@@ -12,6 +13,7 @@ import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
+import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 import com.sirma.itt.javacourse.chatserver.commands.ServerCommand;
 import com.sirma.itt.javacourse.chatserver.commands.ServerCommandFactory;
 import com.sirma.itt.javacourse.chatserver.views.View;
@@ -66,36 +68,35 @@ public class ClientThread implements Runnable {
 	 */
 	@Override
 	public void run() {
-		try {
-			while (true) {
-				try {
-					Query query = handler.readQuery();
-					if (query == null) {
-						break;
+		if (serverManager.getNumberOfOnlineClients() >= ServerConfig.THREAD_POOL_MAX_SIZE) {
+			handler.sendQuery(new Query(QueryTypes.Refused, LanguageConstants.LOGIN_SERVER_FULL));
+		} else {
+			handler.sendQuery(new Query(QueryTypes.Success, ""));
+			try {
+				while (true) {
+					try {
+						Query query = handler.readQuery();
+						if (query == null) {
+							break;
+						}
+						handleClientQuery(query);
+					} catch (SocketTimeoutException e) {
+						handler.sendQuery(new Query(QueryTypes.Alive, ALIVE_MESSAGE));
 					}
-					handleClientQuery(query);
-				} catch (SocketTimeoutException e) {
-					handler.sendQuery(new Query(QueryTypes.Alive, ALIVE_MESSAGE));
 				}
+			} catch (SocketException e) {
+				clearClient();
+				String formattedMessage = String.format("@%s %s", client.getNickname(),
+						bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
+				view.appendMessageToConsole(formattedMessage);
+				view.removeOnlineClient(client.getNickname());
+				serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client
+						.getNickname()));
+				LOGGER.error(e.getMessage(), e);
+				return;
+			} catch (IOException e) {
+				LOGGER.error(e.getMessage(), e);
 			}
-			// } catch (SocketException e) {
-			// clearClient();
-			// String formattedMessage = String.format("@%s %s", client.getNickname(),
-			// bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
-			// view.appendMessageToConsole(formattedMessage);
-			// view.removeOnlineClient(client.getNickname());
-			// serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client
-			// .getNickname()));
-			// LOGGER.debug(e.getMessage(), e);
-			// return;
-		} catch (IOException e) {
-			String formattedMessage = String.format("@%s %s", client.getNickname(),
-					bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
-			view.appendMessageToConsole(formattedMessage);
-			view.removeOnlineClient(client.getNickname());
-			serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client
-					.getNickname()));
-			LOGGER.error(e.getMessage(), e);
 		}
 
 		clearClient();
