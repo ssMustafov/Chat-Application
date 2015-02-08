@@ -64,6 +64,23 @@ public class FunctionalTests {
 	}
 
 	/**
+	 * Tests connecting to the server and expecting successful accept.
+	 */
+	@Test
+	public void testConnectionResponseQuerySuccess() {
+		try {
+			Socket socket = new Socket(host, port);
+			QueryHandler clientHandler = new QueryHandler(socket);
+			Query query = clientHandler.readQuery();
+			Query expected = new Query(QueryTypes.Success, "");
+
+			assertEquals(expected.toString(), query.toString());
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+	}
+
+	/**
 	 * Tests login into server with valid nickname.
 	 */
 	@Test
@@ -71,6 +88,7 @@ public class FunctionalTests {
 		try {
 			Socket socket = new Socket(host, port);
 			QueryHandler clientHandler = new QueryHandler(socket);
+			clientHandler.readQuery();
 			clientHandler.sendQuery(new Query(QueryTypes.Login, "test"));
 
 			Query expectedWelcomeQuery = new Query(QueryTypes.LoggedIn, "test");
@@ -91,6 +109,7 @@ public class FunctionalTests {
 		try {
 			Socket socket = new Socket(host, port);
 			QueryHandler clientHandler = new QueryHandler(socket);
+			clientHandler.readQuery();
 			clientHandler.sendQuery(new Query(QueryTypes.Login, "[test]"));
 
 			assertEquals(QueryTypes.Refused, clientHandler.readQuery().getQueryType());
@@ -107,6 +126,7 @@ public class FunctionalTests {
 		try {
 			Socket socket = new Socket(host, port);
 			QueryHandler clientHandler = new QueryHandler(socket);
+			clientHandler.readQuery();
 			clientHandler.sendQuery(new Query(QueryTypes.Login, "long-client-nickname_313"));
 
 			assertEquals(QueryTypes.Refused, clientHandler.readQuery().getQueryType());
@@ -123,6 +143,7 @@ public class FunctionalTests {
 		try {
 			Socket socket = new Socket(host, port);
 			QueryHandler clientHandler = new QueryHandler(socket);
+			clientHandler.readQuery();
 			clientHandler.sendQuery(new Query(QueryTypes.Login, ""));
 
 			assertEquals(QueryTypes.Refused, clientHandler.readQuery().getQueryType());
@@ -139,12 +160,14 @@ public class FunctionalTests {
 		try {
 			Socket socket1 = new Socket(host, port);
 			QueryHandler clientHandler1 = new QueryHandler(socket1);
+			clientHandler1.readQuery();
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "client"));
 
 			sleep(100);
 
 			Socket socket2 = new Socket(host, port);
 			QueryHandler clientHandler2 = new QueryHandler(socket2);
+			clientHandler2.readQuery();
 			clientHandler2.sendQuery(new Query(QueryTypes.Login, "client"));
 
 			assertEquals(QueryTypes.LoggedIn, clientHandler1.readQuery().getQueryType());
@@ -162,6 +185,7 @@ public class FunctionalTests {
 		try {
 			Socket socket = new Socket(host, port);
 			QueryHandler clientHandler = new QueryHandler(socket);
+			clientHandler.readQuery();
 			clientHandler.sendQuery(new Query(QueryTypes.Login, "test"));
 			clientHandler.sendQuery(new Query(QueryTypes.Logout, "test"));
 			clientHandler.readQuery();
@@ -184,6 +208,7 @@ public class FunctionalTests {
 		try {
 			Socket socket = new Socket(host, port);
 			QueryHandler clientHandler = new QueryHandler(socket);
+			clientHandler.readQuery();
 			clientHandler.sendQuery(new Query(QueryTypes.Logout, "test"));
 
 			Query expectedLogoutQuery = new Query(QueryTypes.Refused,
@@ -203,12 +228,14 @@ public class FunctionalTests {
 			Socket socket1 = new Socket(host, port);
 			Socket socket2 = new Socket(host, port);
 			QueryHandler clientHandler1 = new QueryHandler(socket1);
+			clientHandler1.readQuery();
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "pesho"));
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 
 			QueryHandler clientHandler2 = new QueryHandler(socket2);
+			clientHandler2.readQuery();
 			clientHandler2.sendQuery(new Query(QueryTypes.Login, "gosho"));
 			clientHandler2.readQuery();
 			clientHandler2.readQuery();
@@ -234,12 +261,14 @@ public class FunctionalTests {
 			Socket socket1 = new Socket(host, port);
 			Socket socket2 = new Socket(host, port);
 			QueryHandler clientHandler1 = new QueryHandler(socket1);
+			clientHandler1.readQuery();
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "pesho"));
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 
 			QueryHandler clientHandler2 = new QueryHandler(socket2);
+			clientHandler2.readQuery();
 			clientHandler2.sendQuery(new Query(QueryTypes.Login, "gosho"));
 			clientHandler2.readQuery();
 			clientHandler2.readQuery();
@@ -260,11 +289,13 @@ public class FunctionalTests {
 			Socket socket1 = new Socket(host, port);
 			Socket socket2 = new Socket(host, port);
 			QueryHandler clientHandler1 = new QueryHandler(socket1);
+			clientHandler1.readQuery();
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "pesho"));
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 
 			QueryHandler clientHandler2 = new QueryHandler(socket2);
+			clientHandler2.readQuery();
 			clientHandler2.sendQuery(new Query(QueryTypes.Login, "gosho"));
 			clientHandler2.readQuery();
 			clientHandler2.readQuery();
@@ -289,18 +320,21 @@ public class FunctionalTests {
 			Socket socket2 = new Socket(host, port);
 			Socket socket3 = new Socket(host, port);
 			QueryHandler clientHandler1 = new QueryHandler(socket1);
+			clientHandler1.readQuery();
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "pesho"));
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 			clientHandler1.readQuery();
 
 			QueryHandler clientHandler2 = new QueryHandler(socket2);
+			clientHandler2.readQuery();
 			clientHandler2.sendQuery(new Query(QueryTypes.Login, "gosho"));
 			clientHandler2.readQuery();
 			clientHandler2.readQuery();
 			clientHandler2.readQuery();
 
 			QueryHandler clientHandler3 = new QueryHandler(socket3);
+			clientHandler3.readQuery();
 			clientHandler3.sendQuery(new Query(QueryTypes.Login, "test-client"));
 			clientHandler3.readQuery();
 			clientHandler3.readQuery();
