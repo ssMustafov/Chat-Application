@@ -1,7 +1,6 @@
 package com.sirma.itt.javacourse.chatserver.server;
 
 import java.io.IOException;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ResourceBundle;
 
@@ -24,6 +23,7 @@ import com.sirma.itt.javacourse.chatserver.views.View;
  */
 public class ClientThread implements Runnable {
 
+	private static final String ALIVE_MESSAGE = "alive";
 	private static final Logger LOGGER = LogManager.getLogger(ClientThread.class);
 	private ResourceBundle bundle = LanguageBundleSingleton.getServerBundleInstance();
 	private ServerManager serverManager;
@@ -75,20 +75,26 @@ public class ClientThread implements Runnable {
 					}
 					handleClientQuery(query);
 				} catch (SocketTimeoutException e) {
-					handler.sendQuery(new Query(QueryTypes.Alive, "!alive"));
+					handler.sendQuery(new Query(QueryTypes.Alive, ALIVE_MESSAGE));
 				}
 			}
-		} catch (SocketException e) {
-			clearClient();
+			// } catch (SocketException e) {
+			// clearClient();
+			// String formattedMessage = String.format("@%s %s", client.getNickname(),
+			// bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
+			// view.appendMessageToConsole(formattedMessage);
+			// view.removeOnlineClient(client.getNickname());
+			// serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client
+			// .getNickname()));
+			// LOGGER.debug(e.getMessage(), e);
+			// return;
+		} catch (IOException e) {
 			String formattedMessage = String.format("@%s %s", client.getNickname(),
 					bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
 			view.appendMessageToConsole(formattedMessage);
 			view.removeOnlineClient(client.getNickname());
 			serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client
 					.getNickname()));
-			LOGGER.debug(e.getMessage(), e);
-			return;
-		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
 

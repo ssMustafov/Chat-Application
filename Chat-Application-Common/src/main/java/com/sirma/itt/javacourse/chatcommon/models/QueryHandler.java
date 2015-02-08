@@ -6,6 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 
 /**
@@ -16,6 +19,8 @@ import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
  * @author Sinan
  */
 public class QueryHandler {
+
+	private static final Logger LOGGER = LogManager.getLogger(QueryHandler.class);
 	private Socket socket;
 	private ObjectOutputStream objectOutputStream;
 	private ObjectInputStream objectInputStream;
@@ -42,7 +47,7 @@ public class QueryHandler {
 		try {
 			objectOutputStream.writeObject(query);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
@@ -59,7 +64,7 @@ public class QueryHandler {
 		try {
 			query = (Query) objectInputStream.readObject();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		return query;
@@ -74,7 +79,7 @@ public class QueryHandler {
 			objectOutputStream.close();
 			socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
@@ -86,7 +91,7 @@ public class QueryHandler {
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			objectInputStream = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
@@ -97,7 +102,7 @@ public class QueryHandler {
 		try {
 			this.socket.setSoTimeout(ServerConfig.CLIENT_TIMEOUT);
 		} catch (SocketException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 }

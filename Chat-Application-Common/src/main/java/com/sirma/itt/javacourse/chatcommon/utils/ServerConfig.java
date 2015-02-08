@@ -13,9 +13,9 @@ public final class ServerConfig {
 	}
 
 	/**
-	 * 3 minutes timeout.
+	 * 15 minutes timeout.
 	 */
-	public static final int CLIENT_TIMEOUT = 180000;
+	public static final int CLIENT_TIMEOUT = 900000;
 
 	public static final int THREAD_POOL_MAX_SIZE = 20;
 
