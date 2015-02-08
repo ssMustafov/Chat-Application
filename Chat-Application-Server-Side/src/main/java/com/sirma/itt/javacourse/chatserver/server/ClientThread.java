@@ -68,7 +68,7 @@ public class ClientThread implements Runnable {
 	 */
 	@Override
 	public void run() {
-		if (serverManager.getNumberOfOnlineClients() >= ServerConfig.THREAD_POOL_MAX_SIZE) {
+		if (serverManager.getNumberOfOnlineClients() >= ServerConfig.CLIENT_CONNECTIONS_MAX_SIZE) {
 			handler.sendQuery(new Query(QueryTypes.Refused, LanguageConstants.LOGIN_SERVER_FULL));
 		} else {
 			handler.sendQuery(new Query(QueryTypes.Success, ""));

@@ -24,7 +24,7 @@ import com.sirma.itt.javacourse.chatserver.views.View;
 public class LoadTest {
 
 	private static final Logger LOGGER = LogManager.getLogger(LoadTest.class);
-	private final int numberOfClients = ServerConfig.THREAD_POOL_MAX_SIZE;
+	private final int numberOfClients = ServerConfig.CLIENT_CONNECTIONS_MAX_SIZE;
 	private final String host = "localhost";
 	private final int testPort = 7000;
 	private Server server;
