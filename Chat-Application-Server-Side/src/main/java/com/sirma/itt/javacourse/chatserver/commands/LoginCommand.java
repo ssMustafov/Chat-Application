@@ -1,6 +1,9 @@
 package com.sirma.itt.javacourse.chatserver.commands;
 
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -76,9 +79,7 @@ public class LoginCommand extends ServerCommand {
 		}
 
 		client.setNickname(nickname);
-		getServerManager().dispatchQueryToAll(new Query(QueryTypes.ClientConnected, nickname));
-
-		sleep(100);
+		dispatchClientConnectedQuery(nickname);
 
 		getServerManager().addClient(client);
 
@@ -95,17 +96,35 @@ public class LoginCommand extends ServerCommand {
 	}
 
 	/**
-	 * Sleeps for the given time.
+	 * Dispatches a {@link QueryTypes#ClientConnected} {@link Query} to the already connected
+	 * clients, that this client has connected. It uses {@link ExecutorService} with
+	 * {@link Executors#newSingleThreadExecutor()} to send the query with given await termination.
+	 * This is done due to {@link ServerManager#dispatchQueryToAll(Query)} method's blocking the
+	 * sending of a query to the server.
 	 * 
-	 * @param time
-	 *            - the time to sleep in ms
+	 * @param nickname
+	 *            - the nickname of the newly connected client to be sent to the already connected
+	 *            clients
 	 */
-	private void sleep(int time) {
+	private void dispatchClientConnectedQuery(final String nickname) {
+		int timeToWait = 100;
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				getServerManager().dispatchQueryToAll(
+						new Query(QueryTypes.ClientConnected, nickname));
+			}
+		});
+
 		try {
-			Thread.sleep(time);
+			executor.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
+
+		executor.shutdown();
 	}
 
 }
