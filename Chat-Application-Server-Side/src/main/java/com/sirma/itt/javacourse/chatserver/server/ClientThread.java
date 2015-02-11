@@ -86,13 +86,13 @@ public class ClientThread implements Runnable {
 				}
 			} catch (SocketException e) {
 				clearClient();
-				String formattedMessage = String.format("@%s %s", client.getNickname(),
+				String formattedMessage = String.format("@%s%s", client.getNickname(),
 						bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
 				view.appendMessageToConsole(formattedMessage);
 				view.removeOnlineClient(client.getNickname());
 				serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client
 						.getNickname()));
-				LOGGER.error(e.getMessage(), e);
+				LOGGER.error("Client lost connection", e);
 				return;
 			} catch (IOException e) {
 				LOGGER.error(e.getMessage(), e);
