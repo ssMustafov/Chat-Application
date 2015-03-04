@@ -68,7 +68,7 @@ public final class Validator {
 		if (message.length() == 0) {
 			return message;
 		}
-		// return message.substring(0, 1).toUpperCase() + message.substring(1);
+
 		return Character.toUpperCase(message.charAt(0)) + message.substring(1);
 	}
 
