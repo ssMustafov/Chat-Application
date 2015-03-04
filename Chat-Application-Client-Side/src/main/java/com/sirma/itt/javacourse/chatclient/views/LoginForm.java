@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 
 import com.sirma.itt.javacourse.chatclient.client.Login;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 
 /**
@@ -46,7 +47,7 @@ public class LoginForm implements ActionListener {
 	 */
 	public LoginForm() {
 		frame = new JFrame();
-		frame.setTitle(bundle.getString("loginTitle"));
+		frame.setTitle(bundle.getString(LanguageConstants.LOGIN_TITLE_MESSAGE));
 		frame.setSize(300, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -114,7 +115,7 @@ public class LoginForm implements ActionListener {
 	 * Creates the labels of the form.
 	 */
 	private void createLabels() {
-		label = new JLabel(bundle.getString("enterNickname"));
+		label = new JLabel(bundle.getString(LanguageConstants.LOGIN_ENTER_NICKNAME_MESSAGE));
 	}
 
 	/**
@@ -150,7 +151,7 @@ public class LoginForm implements ActionListener {
 	 * Creates the buttons.
 	 */
 	private void createButtons() {
-		loginButton = new JButton(bundle.getString("login"));
+		loginButton = new JButton(bundle.getString(LanguageConstants.LOGIN_MESSAGE));
 		loginButton.setActionCommand(LOGIN_BUTTON_ACTION_COMMAND);
 		loginButton.addActionListener(this);
 	}
@@ -218,9 +219,9 @@ public class LoginForm implements ActionListener {
 	 * Updates the text of the UI elements. Must be invoked when the locale is changed.
 	 */
 	private void onLocaleChange() {
-		frame.setTitle(bundle.getString("loginTitle"));
-		label.setText(bundle.getString("enterNickname"));
-		loginButton.setText(bundle.getString("login"));
+		frame.setTitle(bundle.getString(LanguageConstants.LOGIN_TITLE_MESSAGE));
+		label.setText(bundle.getString(LanguageConstants.LOGIN_ENTER_NICKNAME_MESSAGE));
+		loginButton.setText(bundle.getString(LanguageConstants.LOGIN_MESSAGE));
 	}
 
 	/**
