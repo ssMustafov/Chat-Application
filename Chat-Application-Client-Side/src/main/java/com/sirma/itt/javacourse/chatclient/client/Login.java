@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.sirma.itt.javacourse.chatclient.utils.ServerFinder;
 import com.sirma.itt.javacourse.chatclient.views.LoginForm;
-import com.sirma.itt.javacourse.chatclient.views.View;
 import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;

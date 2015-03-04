@@ -27,6 +27,7 @@ import com.sirma.itt.javacourse.chatclient.utils.MementoCaretaker;
 import com.sirma.itt.javacourse.chatclient.utils.MessageMemento;
 import com.sirma.itt.javacourse.chatcommon.utils.Date;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageBundleSingleton;
+import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
 import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 import com.sirma.itt.javacourse.chatcommon.utils.Validator;
 
@@ -57,9 +58,13 @@ public class ClientView implements View, ActionListener {
 
 	/**
 	 * Creates a new user interface for the client.
+	 * 
+	 * @param client
+	 *            - the client
 	 */
 	public ClientView(Client client) {
-		frame.setTitle(bundle.getString("title") + " - " + client.getNickname());
+		frame.setTitle(bundle.getString(LanguageConstants.CLIENT_TITLE_MESSAGE) + " - "
+				+ client.getNickname());
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -72,13 +77,13 @@ public class ClientView implements View, ActionListener {
 		JScrollPane consoleScrollPane = new JScrollPane();
 		consoleScrollPane.setViewportView(chatMessagesArea);
 		TitledBorder chatMessagesBorder = BorderFactory.createTitledBorder(bundle
-				.getString("chatMessages"));
+				.getString(LanguageConstants.CLIENT_CHAT_TITLE_MESSAGE));
 		chatMessagesBorder.setTitleJustification(TitledBorder.CENTER);
 		consoleScrollPane.setBorder(chatMessagesBorder);
 
 		JScrollPane listScrollPane = new JScrollPane(onlineClientsList);
 		TitledBorder onlineClientsBorder = BorderFactory.createTitledBorder(bundle
-				.getString("onlineClients"));
+				.getString(LanguageConstants.ONLINE_CLIENTS_MESSAGE));
 		onlineClientsBorder.setTitleJustification(TitledBorder.CENTER);
 		listScrollPane.setBorder(onlineClientsBorder);
 
@@ -200,11 +205,11 @@ public class ClientView implements View, ActionListener {
 	 * Creates the buttons.
 	 */
 	private void createButtons() {
-		sendMessageButton = new JButton(bundle.getString("send"));
+		sendMessageButton = new JButton(bundle.getString(LanguageConstants.CLIENT_SEND_MESSAGE));
 		sendMessageButton.setActionCommand(SEND_MESSAGE_BUTTON_ACTION_COMMAND);
 		sendMessageButton.addActionListener(this);
 
-		logoutButton = new JButton(bundle.getString("logout"));
+		logoutButton = new JButton(bundle.getString(LanguageConstants.CLIENT_LOGOUT_MESSAGE));
 		logoutButton.setActionCommand(LOGOUT_BUTTON_ACTION_COMMAND);
 		logoutButton.addActionListener(this);
 	}
