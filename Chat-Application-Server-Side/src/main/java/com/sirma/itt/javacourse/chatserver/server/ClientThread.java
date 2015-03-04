@@ -1,5 +1,6 @@
 package com.sirma.itt.javacourse.chatserver.server;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -33,6 +34,7 @@ public class ClientThread implements Runnable {
 	private View view;
 	private Client client;
 	private QueryHandler handler;
+	private Thread thisThread;
 
 	/**
 	 * Creates a new client thread with given {@link ServerManager}, {@link Client} and {@link View}
@@ -60,7 +62,8 @@ public class ClientThread implements Runnable {
 	 * Starts reading queries from the client in an infinite loop.
 	 */
 	public void start() {
-		new Thread(this).start();
+		thisThread = new Thread(this);
+		thisThread.start();
 	}
 
 	/**
@@ -80,6 +83,8 @@ public class ClientThread implements Runnable {
 							break;
 						}
 						handleClientQuery(query);
+					} catch (EOFException e) {
+						break;
 					} catch (SocketTimeoutException e) {
 						handler.sendQuery(new Query(QueryTypes.Alive, ALIVE_MESSAGE));
 					}
@@ -100,6 +105,7 @@ public class ClientThread implements Runnable {
 		}
 
 		clearClient();
+		thisThread.interrupt();
 	}
 
 	/**

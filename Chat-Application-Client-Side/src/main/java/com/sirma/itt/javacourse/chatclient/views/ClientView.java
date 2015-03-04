@@ -186,7 +186,6 @@ public class ClientView implements View, ActionListener {
 		} else if (LOGOUT_BUTTON_ACTION_COMMAND.equals(cmd)) {
 			client.logout();
 			frame.dispose();
-			new LoginForm();
 		}
 	}
 
