@@ -76,7 +76,7 @@ public class Login implements Runnable {
 		if (socket == null) {
 			form.showErrorDialog(bundle.getString(LanguageConstants.LOGIN_NO_SERVER_MESSAGE));
 		} else {
-			queryHandler = new QueryHandler(socket);
+			queryHandler = new QueryHandler(socket, false);
 			try {
 				Query canProceedQuery = queryHandler.readQuery();
 				if (canProceedQuery.getQueryType() == QueryTypes.Success) {

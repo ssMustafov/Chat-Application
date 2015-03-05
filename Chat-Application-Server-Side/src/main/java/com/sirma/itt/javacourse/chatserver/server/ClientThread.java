@@ -96,7 +96,7 @@ public class ClientThread implements Runnable {
 				view.removeOnlineClient(client.getNickname());
 				serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client
 						.getNickname()));
-				LOGGER.error("Client lost connection", e);
+				LOGGER.debug("Client lost connection: " + client.getNickname());
 			} catch (IOException e) {
 				LOGGER.error(e.getMessage(), e);
 			}

@@ -15,9 +15,9 @@ public final class ServerConfig {
 	}
 
 	/**
-	 * 15 minutes timeout.
+	 * 1 minute timeout.
 	 */
-	public static final int CLIENT_TIMEOUT = 900000;
+	public static final int CLIENT_TIMEOUT = 60000;
 
 	public static final int CLIENT_CONNECTIONS_MAX_SIZE = 20;
 

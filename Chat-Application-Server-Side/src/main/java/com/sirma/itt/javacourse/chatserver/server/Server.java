@@ -106,6 +106,7 @@ public class Server implements Runnable {
 			view.showErrorDialog(bundle.getString(LanguageConstants.SERVER_CANNOT_START_MESSAGE));
 			LOGGER.error(e.getMessage(), e);
 		}
+
 		thisThread = new Thread(this);
 		thisThread.start();
 		view.appendMessageToConsole(bundle.getString(LanguageConstants.SERVER_STARTED_MESSAGE)
@@ -129,6 +130,7 @@ public class Server implements Runnable {
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
+
 		view.appendMessageToConsole(bundle.getString(LanguageConstants.SERVER_CLOSED_MESSAGE));
 		view.clearOnlineClientsList();
 		thisThread.interrupt();

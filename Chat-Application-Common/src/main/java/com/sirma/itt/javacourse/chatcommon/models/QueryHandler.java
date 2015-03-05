@@ -21,6 +21,7 @@ import com.sirma.itt.javacourse.chatcommon.utils.ServerConfig;
 public class QueryHandler {
 
 	private static final Logger LOGGER = LogManager.getLogger(QueryHandler.class);
+	private boolean isToSetTimeout;
 	private Socket socket;
 	private ObjectOutputStream objectOutputStream;
 	private ObjectInputStream objectInputStream;
@@ -32,7 +33,21 @@ public class QueryHandler {
 	 *            - the socket of the client
 	 */
 	public QueryHandler(Socket socket) {
+		this(socket, true);
+	}
+
+	/**
+	 * Creates a new query handler with given client socket.
+	 * 
+	 * @param socket
+	 *            - the socket of the client
+	 * @param isToSetTimeout
+	 *            - a flag indicating if to this query handler to be set a client timeout; true -
+	 *            means it will be set; false - means it will be not
+	 */
+	public QueryHandler(Socket socket, boolean isToSetTimeout) {
 		this.socket = socket;
+		this.isToSetTimeout = isToSetTimeout;
 		createStreams();
 		setClientTimeout();
 	}
@@ -99,10 +114,12 @@ public class QueryHandler {
 	 * Sets timeout for reading.
 	 */
 	private void setClientTimeout() {
-		try {
-			this.socket.setSoTimeout(ServerConfig.CLIENT_TIMEOUT);
-		} catch (SocketException e) {
-			LOGGER.error(e.getMessage(), e);
+		if (isToSetTimeout) {
+			try {
+				this.socket.setSoTimeout(ServerConfig.CLIENT_TIMEOUT);
+			} catch (SocketException e) {
+				LOGGER.error(e.getMessage(), e);
+			}
 		}
 	}
 }
