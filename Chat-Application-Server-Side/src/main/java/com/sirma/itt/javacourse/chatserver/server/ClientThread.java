@@ -20,7 +20,9 @@ import com.sirma.itt.javacourse.chatserver.commands.ServerCommandFactory;
 import com.sirma.itt.javacourse.chatserver.views.View;
 
 /**
- * Reads queries from the client. Every client has this thread working for him.
+ * Reads queries from the client. Every client has this thread working for him. Alive message is
+ * sent to the client in an interval of time. The time of the alive message is set at
+ * {@link ServerConfig#CLIENT_TIMEOUT}.
  * 
  * @author Sinan
  */
