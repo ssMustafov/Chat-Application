@@ -4,7 +4,7 @@ import com.sirma.itt.javacourse.chatcommon.models.Query;
 import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
 import com.sirma.itt.javacourse.chatcommon.models.QueryTypes;
 import com.sirma.itt.javacourse.chatcommon.utils.LanguageConstants;
-import com.sirma.itt.javacourse.chatcommon.utils.Validator;
+import com.sirma.itt.javacourse.chatcommon.utils.StringUtil;
 import com.sirma.itt.javacourse.chatserver.server.Client;
 import com.sirma.itt.javacourse.chatserver.server.ServerManager;
 import com.sirma.itt.javacourse.chatserver.server.SocketsManager;
@@ -51,7 +51,7 @@ public class SendMessageCommand extends ServerCommand {
 		}
 
 		String message = query.getMessage();
-		String capitalizedMessage = Validator.capitalizeFirstLetter(message);
+		String capitalizedMessage = StringUtil.capitalizeFirstLetter(message);
 		String formattedMessage = String.format("<%s>: %s", client.getNickname(),
 				capitalizedMessage);
 		getServerManager().dispatchQueryToAll(new Query(QueryTypes.SentMessage, formattedMessage));

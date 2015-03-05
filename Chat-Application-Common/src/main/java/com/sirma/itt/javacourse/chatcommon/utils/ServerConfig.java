@@ -1,6 +1,8 @@
 package com.sirma.itt.javacourse.chatcommon.utils;
 
 /**
+ * Holds constants for server configuration.
+ * 
  * @author Sinan
  */
 public final class ServerConfig {

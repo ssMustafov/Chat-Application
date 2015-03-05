@@ -10,6 +10,7 @@ import com.sirma.itt.javacourse.chatcommon.models.Query;
  */
 public class ClientsNicknames extends ClientCommand {
 
+	private static final String SPACE_REGEX = "\\s";
 	private Query query;
 
 	/**
@@ -30,7 +31,7 @@ public class ClientsNicknames extends ClientCommand {
 	 */
 	@Override
 	public void execute() {
-		String[] nicknames = query.getMessage().split("\\s");
+		String[] nicknames = query.getMessage().split(SPACE_REGEX);
 		for (int i = 0; i < nicknames.length; i++) {
 			getClientView().addOnlineClient(nicknames[i]);
 		}

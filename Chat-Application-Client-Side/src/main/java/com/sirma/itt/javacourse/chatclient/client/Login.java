@@ -86,7 +86,7 @@ public class Login implements Runnable {
 					socket.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 	}

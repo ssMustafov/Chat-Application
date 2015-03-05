@@ -28,25 +28,23 @@ public class DocumentLengthFilter extends PlainDocument {
 	}
 
 	/**
-	 * Limits the inserted string's length to the given max length. {@inheritDoc}
+	 * Limits the inserted string's length to the given max length. Rejects the entire insertion if
+	 * it would make the contents too long. {@inheritDoc}
 	 */
 	@Override
 	public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
-		// This rejects the entire insertion if it would make
-		// the contents too long.
 		if ((getLength() + str.length()) <= maxLength) {
 			super.insertString(offset, str, attr);
 		}
 	}
 
 	/**
-	 * Limits the replaced string's length to the given max length. {@inheritDoc}
+	 * Limits the replaced string's length to the given max length. Rejects the entire replacement
+	 * if it would make the contents too long {@inheritDoc}
 	 */
 	@Override
 	public void replace(int offset, int length, String str, AttributeSet attrs)
 			throws BadLocationException {
-		// This rejects the entire replacement if it would make
-		// the contents too long.
 		if ((getLength() + str.length() - length) <= maxLength) {
 			super.replace(offset, length, str, attrs);
 		}
