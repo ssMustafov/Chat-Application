@@ -11,6 +11,7 @@ import com.sirma.itt.javacourse.chatcommon.models.QueryHandler;
  * @author Sinan
  */
 public class ClientsSockets implements SocketsManager {
+
 	private Map<Integer, QueryHandler> clients = new HashMap<>();
 
 	/**
@@ -18,7 +19,12 @@ public class ClientsSockets implements SocketsManager {
 	 */
 	@Override
 	public QueryHandler getHandler(int id) {
-		return clients.get(id);
+		QueryHandler handler = null;
+		synchronized (clients) {
+			handler = clients.get(id);
+		}
+
+		return handler;
 	}
 
 	/**
@@ -26,7 +32,9 @@ public class ClientsSockets implements SocketsManager {
 	 */
 	@Override
 	public void add(int id, QueryHandler queryHandler) {
-		clients.put(id, queryHandler);
+		synchronized (clients) {
+			clients.put(id, queryHandler);
+		}
 	}
 
 	/**
@@ -34,7 +42,9 @@ public class ClientsSockets implements SocketsManager {
 	 */
 	@Override
 	public void remove(int id) {
-		clients.remove(id);
+		synchronized (clients) {
+			clients.remove(id);
+		}
 	}
 
 	/**
@@ -42,7 +52,9 @@ public class ClientsSockets implements SocketsManager {
 	 */
 	@Override
 	public void clear() {
-		clients.clear();
+		synchronized (clients) {
+			clients.clear();
+		}
 	}
 
 }

@@ -22,12 +22,14 @@ public class ClientsManager implements Runnable, ServerManager {
 	private SocketsManager socketsManager;
 	private List<Client> clients = new ArrayList<>();
 	private Queue<Query> queriesQueue = new LinkedList<>();
+	private Thread thisThread;
 
 	/**
 	 * Creates a new clients manager.
 	 */
 	public ClientsManager() {
-		new Thread(this).start();
+		thisThread = new Thread(this);
+		thisThread.start();
 	}
 
 	/**
@@ -96,13 +98,14 @@ public class ClientsManager implements Runnable, ServerManager {
 		synchronized (queriesQueue) {
 			queriesQueue.clear();
 		}
+		thisThread.interrupt();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Client> getClientsList() {
+	public synchronized List<Client> getClientsList() {
 		return clients;
 	}
 
@@ -110,7 +113,7 @@ public class ClientsManager implements Runnable, ServerManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getNumberOfOnlineClients() {
+	public synchronized int getNumberOfOnlineClients() {
 		return clients.size();
 	}
 
