@@ -36,6 +36,7 @@ public class Server implements Runnable {
 	private View view;
 	private int port;
 	private boolean isRunning = false;
+	private Thread thisThread;
 
 	/**
 	 * Creates a new chat server with given {@link View} and port.
@@ -105,7 +106,8 @@ public class Server implements Runnable {
 			view.showErrorDialog(bundle.getString(LanguageConstants.SERVER_CANNOT_START_MESSAGE));
 			LOGGER.error(e.getMessage(), e);
 		}
-		new Thread(this).start();
+		thisThread = new Thread(this);
+		thisThread.start();
 		view.appendMessageToConsole(bundle.getString(LanguageConstants.SERVER_STARTED_MESSAGE)
 				+ " " + serverSocket.getLocalPort());
 		return isRunning;
@@ -129,6 +131,7 @@ public class Server implements Runnable {
 		}
 		view.appendMessageToConsole(bundle.getString(LanguageConstants.SERVER_CLOSED_MESSAGE));
 		view.clearOnlineClientsList();
+		thisThread.interrupt();
 		LOGGER.info("Closed the server");
 		return true;
 	}
