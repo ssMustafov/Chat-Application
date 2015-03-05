@@ -10,12 +10,18 @@ import java.util.ResourceBundle;
  */
 public final class LanguageBundleSingleton {
 
-	private static ResourceBundle serverBundle = ResourceBundle.getBundle("ServerBundle",
-			new Locale("en", "US"));
-	private static ResourceBundle clientLoginBundle = ResourceBundle.getBundle("ClientLoginBundle",
-			new Locale("en", "US"));
-	private static ResourceBundle clientBundle = ResourceBundle.getBundle("ClientBundle",
-			new Locale("en", "US"));
+	private static final String SERVER_BUNDLE_FILE_NAME = "ServerBundle";
+	private static final String CLIENT_BUNDLE_FILE_NAME = "ClientBundle";
+	private static final String CLIENT_LOGIN_BUNDLE_FILE_NAME = "ClientLoginBundle";
+	private static final String EN_LANGUAGE = "en";
+	private static final String US_COUNTRY = "US";
+
+	private static ResourceBundle serverBundle = ResourceBundle.getBundle(SERVER_BUNDLE_FILE_NAME,
+			new Locale(EN_LANGUAGE, US_COUNTRY));
+	private static ResourceBundle clientLoginBundle = ResourceBundle.getBundle(
+			CLIENT_LOGIN_BUNDLE_FILE_NAME, new Locale(EN_LANGUAGE, US_COUNTRY));
+	private static ResourceBundle clientBundle = ResourceBundle.getBundle(CLIENT_BUNDLE_FILE_NAME,
+			new Locale(EN_LANGUAGE, US_COUNTRY));
 
 	/**
 	 * Protects from instantiation.
@@ -58,7 +64,7 @@ public final class LanguageBundleSingleton {
 	 *            - the locale of the bundle
 	 */
 	public static void setServerLocale(Locale locale) {
-		serverBundle = ResourceBundle.getBundle("ServerBundle", locale);
+		serverBundle = ResourceBundle.getBundle(SERVER_BUNDLE_FILE_NAME, locale);
 	}
 
 	/**
@@ -68,7 +74,7 @@ public final class LanguageBundleSingleton {
 	 *            - the locale of the bundle for the client
 	 */
 	public static void setClientLocale(Locale locale) {
-		clientBundle = ResourceBundle.getBundle("ClientBundle", locale);
+		clientBundle = ResourceBundle.getBundle(CLIENT_BUNDLE_FILE_NAME, locale);
 	}
 
 	/**
@@ -78,7 +84,7 @@ public final class LanguageBundleSingleton {
 	 *            - the locale of the bundle for the client login form
 	 */
 	public static void setClientLoginLocale(Locale locale) {
-		clientLoginBundle = ResourceBundle.getBundle("ClientLoginBundle", locale);
+		clientLoginBundle = ResourceBundle.getBundle(CLIENT_LOGIN_BUNDLE_FILE_NAME, locale);
 	}
 
 }
