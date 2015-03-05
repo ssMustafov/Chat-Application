@@ -90,7 +90,6 @@ public class ClientThread implements Runnable {
 					}
 				}
 			} catch (SocketException e) {
-				clearClient();
 				String formattedMessage = String.format("@%s%s", client.getNickname(),
 						bundle.getString(LanguageConstants.SERVER_CLIENT_CRASHED_MESSAGE));
 				view.appendMessageToConsole(formattedMessage);
@@ -98,7 +97,6 @@ public class ClientThread implements Runnable {
 				serverManager.dispatchQueryToAll(new Query(QueryTypes.ClientDisconnected, client
 						.getNickname()));
 				LOGGER.error("Client lost connection", e);
-				return;
 			} catch (IOException e) {
 				LOGGER.error(e.getMessage(), e);
 			}

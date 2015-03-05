@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,20 +33,6 @@ public class FunctionalTests {
 	private final int port = 7000;
 	private Server server;
 	private View view;
-
-	/**
-	 * Sleeps for given time.
-	 * 
-	 * @param time
-	 *            - the time to sleep
-	 */
-	private void sleep(int time) {
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-	}
 
 	/**
 	 * 
@@ -163,7 +152,7 @@ public class FunctionalTests {
 			clientHandler1.readQuery();
 			clientHandler1.sendQuery(new Query(QueryTypes.Login, "client"));
 
-			sleep(100);
+			sleep();
 
 			Socket socket2 = new Socket(host, port);
 			QueryHandler clientHandler2 = new QueryHandler(socket2);
@@ -350,4 +339,32 @@ public class FunctionalTests {
 			LOGGER.error(e.getMessage(), e);
 		}
 	}
+
+	/**
+	 * Uses {@link ExecutorService} to sleep this thread for a 100 milliseconds.
+	 */
+	private void sleep() {
+		final int timeToWait = 100;
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					TimeUnit.MILLISECONDS.sleep(timeToWait);
+				} catch (InterruptedException e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			}
+		});
+
+		try {
+			executor.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+
+		executor.shutdown();
+	}
+
 }

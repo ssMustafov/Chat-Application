@@ -149,7 +149,7 @@ public class Server implements Runnable {
 	 */
 	private void acceptClients() {
 		try {
-			while (isRunning) {
+			while (isRunning && !thisThread.isInterrupted()) {
 				Socket socket = serverSocket.accept();
 
 				Client client = new Client();

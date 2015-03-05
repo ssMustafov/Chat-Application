@@ -52,7 +52,7 @@ public class LoadTest {
 	 * Tests the chat {@link Server} by connecting {@link LoadTest#numberOfClients} clients.
 	 */
 	@Test
-	public void testConnectingAlotOfClients() {
+	public void testConnectingClients() {
 		try {
 			for (int i = 1; i <= numberOfClients; i++) {
 				new Socket(host, testPort);
