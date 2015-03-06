@@ -1,7 +1,5 @@
 package com.sirma.itt.javacourse.chatserver.server;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * Client model. Every client has unique ID and nickname.
  * 
@@ -9,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Client {
 
-	private static AtomicInteger atomicId = new AtomicInteger();
+	private static int idCounter = 0;
 	private int id;
 	private String nickname = "";
 
@@ -20,15 +18,15 @@ public class Client {
 	 *            - the nickname of the client to be set
 	 */
 	public Client(String nickname) {
-		id = atomicId.incrementAndGet();
 		this.nickname = nickname;
+		setId();
 	}
 
 	/**
 	 * Creates a new client with empty nickname.
 	 */
 	public Client() {
-		id = atomicId.incrementAndGet();
+		setId();
 	}
 
 	/**
@@ -48,6 +46,14 @@ public class Client {
 	 */
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+
+	/**
+	 * Sets the unique id of the client.
+	 */
+	private void setId() {
+		id = idCounter;
+		idCounter++;
 	}
 
 	/**
