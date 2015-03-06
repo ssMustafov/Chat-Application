@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -136,31 +133,6 @@ public class FunctionalTests {
 			clientHandler.sendQuery(new Query(QueryTypes.Login, ""));
 
 			assertEquals(QueryTypes.Refused, clientHandler.readQuery().getQueryType());
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * Tests login into server with already connected nickname.
-	 */
-	@Test
-	public void testLoginWithAlreadyConnectedNickname() {
-		try {
-			Socket socket1 = new Socket(host, port);
-			QueryHandler clientHandler1 = new QueryHandler(socket1);
-			clientHandler1.readQuery();
-			clientHandler1.sendQuery(new Query(QueryTypes.Login, "client"));
-
-			sleep();
-
-			Socket socket2 = new Socket(host, port);
-			QueryHandler clientHandler2 = new QueryHandler(socket2);
-			clientHandler2.readQuery();
-			clientHandler2.sendQuery(new Query(QueryTypes.Login, "client"));
-
-			assertEquals(QueryTypes.LoggedIn, clientHandler1.readQuery().getQueryType());
-			assertEquals(QueryTypes.Refused, clientHandler2.readQuery().getQueryType());
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
@@ -338,33 +310,6 @@ public class FunctionalTests {
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
-	}
-
-	/**
-	 * Uses {@link ExecutorService} to sleep this thread for a 100 milliseconds.
-	 */
-	private void sleep() {
-		final int timeToWait = 100;
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-		executor.execute(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					TimeUnit.MILLISECONDS.sleep(timeToWait);
-				} catch (InterruptedException e) {
-					LOGGER.error(e.getMessage(), e);
-				}
-			}
-		});
-
-		try {
-			executor.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
-		executor.shutdown();
 	}
 
 }
