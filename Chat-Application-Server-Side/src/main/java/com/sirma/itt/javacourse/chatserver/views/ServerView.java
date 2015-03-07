@@ -248,7 +248,6 @@ public class ServerView implements View, ActionListener {
 
 				startButton.setEnabled(false);
 				stopButton.setEnabled(true);
-				langList.setEnabled(false);
 				portList.setEnabled(false);
 			}
 		});
